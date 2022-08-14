@@ -1,0 +1,53 @@
+{% extends "../../Base/index.html" %}
+{% load static %}
+
+
+
+{% block Title %}
+<title>Dashboard</title>
+{% endblock %}
+
+{% block Body %}
+ {% include "./../library_nav.html" %} 
+ 
+<section class="content">
+    <div class="container-fluid">
+      <!-- Small boxes (Stat box) -->
+      <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <form>
+                        {% csrf_token %}</form>
+                    <table id="datatable" class="table table-bordered dt-responsive  nowrap w-100">
+                        <thead>
+                        <tr>
+                            <th>#No</th>
+                            <th>Username</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Gender</th>
+                            <th>Date Joined</th>
+                            <th>Action</th>
+                        
+                        </tr>
+                        </thead>
+        
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- general form elements -->
+          
+      </div>
+      </div>
+      
+    
+    </div><!-- /.container-fluid -->
+  </section>
+{% endblock %}
+
+{% block Script %}
+<script src={% static 'script/account/member-list.js' %}></script>
+{% endblock %}

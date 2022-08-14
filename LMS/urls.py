@@ -18,6 +18,6 @@ from django.urls import path, include
 from Library import views
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('users/', include('Library.library_urls')),
+    path('Library/', include('Library.library_urls')),
     path('', views.Login, name='Login'),
 ]

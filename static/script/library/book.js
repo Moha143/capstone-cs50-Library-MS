@@ -1,39 +1,92 @@
 $(document).ready(function () {
-  AllCategory();
+  AllBooks();
   Avatar = "";
+  $("#Avatar").on("change", function (e) {
+    Avatar = e.target.files[0];
+    $("#AvatarName").text(Avatar.name);
+  });
   //Show Category Model
   $("#showModel").on("click", function () {
-    $("#CName").val("");
+    $("#Title").val("");
+    $("#ISBN").val("");
+    $("#Coppy").val("");
+    $("#Availabe").val("");
+    $("#Publisher").val("");
+    $("#Summary").val("");
+    Author();
+    Category();
   });
-  //Add Category
+  //Add Book
   $("#add").on("click", function () {
-    const CName = $("#CName").val();
-    if (CName == "") {
-      toastr.error("error Please Enter Category Name");
+    const Title = $("#Title").val();
+    const Author = $("#Author").val();
+    const Category = $("#Category").val();
+    const ISBN = $("#ISBN").val();
+    const Coppy = $("#Coppy").val();
+    const Availabe = $("#Availabe").val();
+    const Publisher = $("#Publisher").val();
+    const Summary = $("#Summary").val();
+    if (Title == "") {
+      toastr.error("error Please Enter Title");
+      // SendMessage("error", "Enter First Name");
+    } else if (Author == "") {
+      toastr.error("error Please Select Author ");
+      // SendMessage("error", "Enter First Name");
+    } else if (Category == "") {
+      toastr.error("error Please Select Category");
+      // SendMessage("error", "Enter First Name");
+    } else if (ISBN == "") {
+      toastr.error("error Please Enter ISBN Number");
+      // SendMessage("error", "Enter First Name");
+    } else if (Coppy == "") {
+      toastr.error("error Please Enter number of coppies");
+      // SendMessage("error", "Enter First Name");
+    } else if (Availabe == "") {
+      toastr.error("error Please Enter Available coppies");
+      // SendMessage("error", "Enter First Name");
+    } else if (Publisher == "") {
+      toastr.error("error Please Enter Publisher");
+      // SendMessage("error", "Enter First Name");
+    } else if (Summary == "") {
+      toastr.error("error Please Enter Summary");
       // SendMessage("error", "Enter First Name");
     } else {
       let formData = new FormData();
-      formData.append("CName", CName);
+      formData.append("Title", Title);
+      formData.append("Author", Author);
+      formData.append("Category", Category);
+      formData.append("ISBN", ISBN);
+      formData.append("Coppy", Coppy);
+      formData.append("Availabe", Availabe);
+      formData.append("Publisher", Publisher);
+      formData.append("Summary", Summary);
+      formData.append("Avatar", Avatar);
       formData.append("type", "add");
-      $.ajax({
-        method: "POST",
-        url: URLS + "Library/manage_category/" + 0,
-        headers: { "X-CSRFToken": csrftoken },
-        processData: false,
-        contentType: false,
-        data: formData,
-        async: true,
-        success: function (response) {
-          if (!response.isError) {
-            toastr.success(response.Message);
-            $("#AddCategory").modal("hide");
-            AllCategory();
-          } else {
-            toastr.error(response.Message);
-          }
-        },
-        error: function (response) {},
-      });
+      if (Availabe > Coppy) {
+        toastr.error(
+          "error Available coppies must less dhan number of coppies"
+        );
+      } else {
+        $.ajax({
+          method: "POST",
+          url: URLS + "Library/manage_book/" + 0,
+          headers: { "X-CSRFToken": csrftoken },
+          processData: false,
+          contentType: false,
+          data: formData,
+          async: true,
+          success: function (response) {
+            if (!response.isError) {
+              toastr.success(response.Message);
+              $("#AddCategory").modal("hide");
+              AllBooks();
+            } else {
+              toastr.error(response.Message);
+            }
+          },
+          error: function (response) {},
+        });
+      }
     }
   });
   //Update Category
@@ -48,7 +101,7 @@ $(document).ready(function () {
       formData.append("CName", CName);
       $.ajax({
         method: "POST",
-        url: URLS + "Library/manage_category/" + ID,
+        url: URLS + "Library/manage_book/" + ID,
         headers: { "X-CSRFToken": csrftoken },
         processData: false,
         contentType: false,
@@ -58,7 +111,7 @@ $(document).ready(function () {
           if (!response.isError) {
             toastr.success(response.Message);
             $("#UpdateCategory").modal("hide");
-            AllCategory();
+            AllBooks();
           } else {
             toastr.error(response.Message);
           }
@@ -81,7 +134,7 @@ $(document).ready(function () {
         $.ajax({
           async: true,
           method: "DELETE",
-          url: URLS + "Library/manage_category/" + ID,
+          url: URLS + "Library/manage_book/" + ID,
           headers: { "X-CSRFToken": csrftoken },
           async: false,
           success: function (response) {
@@ -89,7 +142,7 @@ $(document).ready(function () {
               swal(response.Message, {
                 icon: "success",
               });
-              AllCategory();
+              AllBooks();
             } else {
               swal(response.Message, {
                 icon: "error",
@@ -108,7 +161,7 @@ $(document).ready(function () {
     $.ajax({
       async: false,
       method: "GET",
-      url: URLS + "Library/manage_category/" + ID,
+      url: URLS + "Library/manage_book/" + ID,
       headers: { "X-CSRFToken": csrftoken },
       async: false,
       success: function (response) {
@@ -125,13 +178,13 @@ $(document).ready(function () {
     });
   });
 
-  function AllCategory() {
+  function AllBooks() {
     var rows = "";
     let formData = new FormData();
     formData.append("type", "get");
     $.ajax({
       method: "POST",
-      url: URLS + "Library/manage_category/" + 0,
+      url: URLS + "Library/manage_book/" + 0,
       headers: { "X-CSRFToken": csrftoken },
       processData: false,
       contentType: false,
@@ -151,7 +204,16 @@ $(document).ready(function () {
     let num = 1;
     if (rows.length > 0) {
       for (var i = 0; i < rows.length; i++) {
-        dataRows.push([rows[i].id, num++, rows[i].name, rows[i].created_at]);
+        dataRows.push([
+          rows[i].id,
+          num++,
+          rows[i].title,
+          rows[i].author,
+          rows[i].category,
+          rows[i].copy,
+          rows[i].available,
+          rows[i].created_at,
+        ]);
       }
     }
     let dataTable = $("#datatable").DataTable().clear();
@@ -161,6 +223,10 @@ $(document).ready(function () {
           `<tr><td>${dataRows[i][1]}</td>`,
           `<td>${dataRows[i][2]}</td>`,
           `<td>${dataRows[i][3]}</td>`,
+          `<td>${dataRows[i][4]}</td>`,
+          `<td>${dataRows[i][5]}</td>`,
+          `<td>${dataRows[i][6]}</td>`,
+          `<td>${dataRows[i][7]}</td>`,
           `
           <button type="button" class="btn btn-info Edit" ID=${dataRows[i][0]}> <i class="far fa-edit"></i></button>
           <button type="button" class="btn btn-danger Delete" ID=${dataRows[i][0]}> <i class="fa fa-trash"></i></button>
@@ -168,6 +234,76 @@ $(document).ready(function () {
           </td>`,
         ])
         .draw();
+    }
+  }
+  function Author() {
+    var rows = "";
+    let formData = new FormData();
+    formData.append("type", "get");
+    $.ajax({
+      method: "POST",
+      url: URLS + "Library/manage_author/" + 0,
+      processData: false,
+      contentType: false,
+      data: formData,
+      headers: { "X-CSRFToken": csrftoken },
+      async: false,
+      success: function (response) {
+        rows = response.Message;
+      },
+      error: function (response) {},
+    });
+
+    var dataRow = "";
+    if (rows.length > 0) {
+      dataRow = `<option value=''>Select Author</option>`;
+      for (var i = 0; i < rows.length; i++) {
+        dataRow +=
+          `
+          <option value='` +
+          rows[i].id +
+          `'>` +
+          rows[i].name +
+          `</option>
+          `;
+      }
+      $("#Author").html(dataRow);
+    } else {
+    }
+  }
+  function Category() {
+    var rows = "";
+    let formData = new FormData();
+    formData.append("type", "get");
+    $.ajax({
+      method: "POST",
+      url: URLS + "Library/manage_category/" + 0,
+      processData: false,
+      contentType: false,
+      data: formData,
+      headers: { "X-CSRFToken": csrftoken },
+      async: false,
+      success: function (response) {
+        rows = response.Message;
+      },
+      error: function (response) {},
+    });
+
+    var dataRow = "";
+    if (rows.length > 0) {
+      dataRow = `<option value=''>Select Category</option>`;
+      for (var i = 0; i < rows.length; i++) {
+        dataRow +=
+          `
+          <option value='` +
+          rows[i].id +
+          `'>` +
+          rows[i].name +
+          `</option>
+          `;
+      }
+      $("#Category").html(dataRow);
+    } else {
     }
   }
 });

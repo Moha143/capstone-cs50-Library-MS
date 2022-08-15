@@ -37,14 +37,17 @@ class Category(models.Model):
 
 
 class Book(models.Model):
-    name = models.CharField(max_length=100)
-    title = models.CharField(max_length=500)
-    ISBN = models.CharField(max_length=20)
-    Subject = models.CharField(max_length=20)
-    publisher = models.CharField(max_length=20)
-
-    Author = models.ForeignKey(
+    title = models.CharField(max_length=500,null=True)
+    summary = models.CharField(max_length=500, null=True)
+    author = models.ForeignKey(
         Author, on_delete=models.RESTRICT)
+    ISBN = models.CharField(max_length=20)
+    publisher = models.CharField(max_length=20)
+    available = models.CharField(max_length=20)
+    copy = models.CharField(max_length=20)
+
+    category = models.ForeignKey(
+        Category, on_delete=models.RESTRICT)
     created_at = models.DateTimeField(default=datetime.datetime.today)
     image = models.FileField(upload_to="book/",
                              default="book/book.jpg")
@@ -72,5 +75,6 @@ class Fine(models.Model):
     amount = models.CharField(max_length=100)
     borrow = models.ForeignKey(
         Borrow, on_delete=models.RESTRICT)
+
     class Meta:
         db_table = 'fine'

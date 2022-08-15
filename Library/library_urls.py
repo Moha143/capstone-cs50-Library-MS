@@ -19,4 +19,5 @@ urlpatterns = [
     path('manage_staff/<int:id>', views.ManageStaff, name='ManageStaff'),
     path('manage_author/<int:id>', views.ManageAuthor, name='ManageAuthor'),
     path('manage_category/<int:id>', views.ManageCategory, name='ManageCategory'),
+    path('manage_book/<int:id>', views.ManageBook, name='ManageBook'),
 ]

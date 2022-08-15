@@ -589,7 +589,7 @@ def ManageBook(request, id):
                 Category = request.POST.get('Category')
                 ISBNs = request.POST.get('ISBN')
                 Coppy = request.POST.get('Coppy')
-                Availabe = request.POST.get('Availabe')
+                Available = request.POST.get('Available')
                 Publisher = request.POST.get('Publisher')
                 Summary = request.POST.get('Summary')
 
@@ -602,7 +602,7 @@ def ManageBook(request, id):
                         return JsonResponse({'isError': True, 'Message': 'This Book already exists'})
                     else:
                         Books = models.Book(title=Title, author=Author, category=Category, ISBN=ISBNs,
-                                            coppy=Coppy, availabe=Availabe, publisher=Publisher, summary=Summary, image=Avatar)
+                                            copy=Coppy, available=Available, publisher=Publisher, summary=Summary, image=Avatar)
                         Books.save()
 
                         message = {

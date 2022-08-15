@@ -23,7 +23,7 @@ $(document).ready(function () {
     const Category = $("#Category").val();
     const ISBN = $("#ISBN").val();
     const Coppy = $("#Coppy").val();
-    const Availabe = $("#Availabe").val();
+    const Available = $("#Available").val();
     const Publisher = $("#Publisher").val();
     const Summary = $("#Summary").val();
     if (Title == "") {
@@ -41,7 +41,7 @@ $(document).ready(function () {
     } else if (Coppy == "") {
       toastr.error("error Please Enter number of coppies");
       // SendMessage("error", "Enter First Name");
-    } else if (Availabe == "") {
+    } else if (Available == "") {
       toastr.error("error Please Enter Available coppies");
       // SendMessage("error", "Enter First Name");
     } else if (Publisher == "") {
@@ -57,12 +57,12 @@ $(document).ready(function () {
       formData.append("Category", Category);
       formData.append("ISBN", ISBN);
       formData.append("Coppy", Coppy);
-      formData.append("Availabe", Availabe);
+      formData.append("Available", Available);
       formData.append("Publisher", Publisher);
       formData.append("Summary", Summary);
       formData.append("Avatar", Avatar);
       formData.append("type", "add");
-      if (Availabe > Coppy) {
+      if (Available > Coppy) {
         toastr.error(
           "error Available coppies must less dhan number of coppies"
         );

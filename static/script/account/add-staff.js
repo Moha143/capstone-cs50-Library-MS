@@ -39,7 +39,7 @@ $(document).ready(function () {
       formData.append("Avatar", Avatar);
       $.ajax({
         method: "POST",
-        url: URLS + "Library/manage_member/" + 0,
+        url: URLS + "Library/manage_staff/" + 0,
         headers: { "X-CSRFToken": csrftoken },
         processData: false,
         contentType: false,

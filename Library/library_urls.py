@@ -12,5 +12,6 @@ urlpatterns = [
 
 
     # Data
-    path('manage_member/<int:id>', views.ManageMember, name='add_staff'),
+    path('manage_member/<int:id>', views.ManageMember, name='manage_members'),
+    path('manage_staff/<int:id>', views.ManageStaff, name='ManageStaff'),
 ]

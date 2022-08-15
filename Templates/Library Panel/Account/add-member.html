@@ -4,17 +4,32 @@
 
 
 {% block Title %}
-<title>Dashboard</title>
+<title>Add Member</title>
 {% endblock %}
 
 {% block Body %}
  {% include "./../library_nav.html" %} 
- 
+ <div class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1 class="m-0">Member</h1>
+      </div><!-- /.col -->
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="#">Member</a></li>
+          <li class="breadcrumb-item active">Add Member</li>
+        </ol>
+      </div><!-- /.col -->
+    </div><!-- /.row -->
+  </div><!-- /.container-fluid -->
+</div>
 <section class="content">
     <div class="container-fluid">
       <!-- Small boxes (Stat box) -->
       <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-2"></div>
+        <div class="col-md-6 ml-3">
             <!-- general form elements -->
             <div class="card card-primary">
               <div class="card-header">
@@ -56,7 +71,7 @@
                   
                   <div class="form-group">
                     <label>Select Gender</label>
-                    <select class="form-control">
+                    <select class="form-control" id="Gender">
                       <option value="">Select Gender</option>
                       <option value="Male">Male</option>
                       <option value="Female">Female</option>

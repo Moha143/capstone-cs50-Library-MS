@@ -9,7 +9,7 @@ class Account(AbstractUser):
     email = models.EmailField(unique=True)
     phone = models.CharField(max_length=50, null=False,
                              blank=False)
-    gender = models.CharField(max_length=10, null=True, blank=True)
+    gender = models.CharField(max_length=50, null=True, blank=True)
     is_member = models.BooleanField(default=False)
     avatar = models.FileField(upload_to="avatars/",
                               default="avatars/avatar.jpg")

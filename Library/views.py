@@ -66,7 +66,7 @@ def add_staff(request):
 def ManageMember(request, id):
     type = request.POST.get('type')
     if id == 0:
-        # Get All Members
+        # Get All Staff
         if request.method == 'GET':
 
             Members = models.Account.objects.filter(
@@ -115,28 +115,30 @@ def ManageMember(request, id):
 
                     return JsonResponse(message, status=200)
             if type == "get":
-
-                Members = models.Account.objects.filter(
-                    is_member=True)
-                message = []
-                for i in range(0, len(Members)):
-                    message.append({
-                        'id': Members[i].id,
-                        'first_name': Members[i].first_name,
-                        'last_name': Members[i].last_name,
-                        'name': Members[i].first_name + ' ' + Members[i].last_name,
-                        'email': Members[i].email,
-                        'phone': Members[i].phone,
-                        'gender': "Male",
-                        'username': Members[i].username,
-                        'date_joined': Members[i].date_joined,
-                        'avatar': str(Members[i].avatar),
-                        'is_active': Members[i].is_active,
-                    })
-                return JsonResponse({'isError': False, 'Message': message}, status=200)
+                try:
+                    Members = models.Account.objects.filter(
+                        is_member=True)
+                    message = []
+                    for i in range(0, len(Members)):
+                        message.append({
+                            'id': Members[i].id,
+                            'first_name': Members[i].first_name,
+                            'last_name': Members[i].last_name,
+                            'name': Members[i].first_name + ' ' + Members[i].last_name,
+                            'email': Members[i].email,
+                            'phone': Members[i].phone,
+                            'gender': Members[i].gender,
+                            'username': Members[i].username,
+                            'date_joined': Members[i].date_joined,
+                            'avatar': str(Members[i].avatar),
+                            'is_active': Members[i].is_active,
+                        })
+                    return JsonResponse({'isError': False, 'Message': message}, status=200)
+                except Exception as error:
+                    return JsonResponse({'Message': str(error)+" Something is wrong please contact ICT office", 'isError': True, }, status=200)
 
     else:
-        # Get Single Admin And Check if the user has the permisison
+
         if request.method == 'GET':
             try:
                 Member = models.Account.objects.get(id=id)
@@ -148,13 +150,14 @@ def ManageMember(request, id):
                     'email': Member.email,
                     'phone': Member.phone,
                     'gender': Member.gender,
-                    'is_Member': Member.is_Member,
+                    'username': Member.username,
+                    'is_Member': Member.is_member,
                     'avatar': str(Member.avatar)
                 }
                 return JsonResponse({'isError': False, 'Message': message}, status=200)
 
             except Exception as error:
-                return JsonResponse({'Message': "Something is wrong please contact ICT office", 'isError': True, }, status=200)
+                return JsonResponse({'Message': str(error)+" Something is wrong please contact ICT office", 'isError': True, }, status=200)
 
         # Delete Member
         if request.method == 'DELETE':
@@ -177,13 +180,17 @@ def ManageMember(request, id):
             Email = request.POST.get('Email')
             Phone = request.POST.get('Phone')
             Gender = request.POST.get('Gender')
+            Username = request.POST.get('Username')
             try:
                 GetMember = models.Account.objects.get(id=id)
-                if models.Account.objects.filter(email=Email).exists():
+                if models.Account.objects.filter(email=Email).exists() and GetMember.email != Email:
                     return JsonResponse({'isError': True, 'Message': 'Email already exists'})
+                elif models.Account.objects.filter(username=Username).exists() and GetMember.username != Username:
+                    return JsonResponse({'isError': True, 'Message': 'Username already exists'})
                 else:
                     GetMember.first_name = FirstName
                     GetMember.last_name = LastName
+                    GetMember.username = Username
                     GetMember.email = Email
                     GetMember.phone = Phone
                     GetMember.gender = Gender
@@ -191,6 +198,142 @@ def ManageMember(request, id):
                     return JsonResponse({'isError': False, 'Message': 'Member has been successfully updated'}, status=200)
             except Exception as error:
 
-                return JsonResponse({'Message': "Something is wrong please contact ICT office", 'isError': True, }, status=200)
+                return JsonResponse({'Message': str(error)+" Something is wrong please contact ICT office", 'isError': True, }, status=200)
 
-                # Save Error to Database
+
+@login_required(login_url='Login')
+def ManageStaff(request, id):
+    type = request.POST.get('type')
+    if id == 0:
+        # Get All Staff
+        if request.method == 'GET':
+
+            Staff = models.Account.objects.filter(
+                is_member=True)
+            message = []
+            for i in range(0, len(Staff)):
+                message.append({
+                    'id': Staff[i].id,
+                    'first_name': Staff[i].first_name,
+                    'last_name': Staff[i].last_name,
+                    'name': Staff[i].first_name + ' ' + Staff[i].last_name,
+                    'email': Staff[i].email,
+                    'phone': Staff[i].phone,
+                    'username': Staff[i].username,
+                    'date_joined': Staff[i].date_joined,
+                    'avatar': str(Staff[i].avatar),
+                    'is_active': Staff[i].is_active,
+                })
+            return JsonResponse({'isError': False, 'Message': message}, status=200)
+
+        # Post new Staff
+        if request.method == 'POST':
+            if type == "add":
+
+                FirstName = request.POST.get('FName')
+                LastName = request.POST.get('LName')
+                Email = request.POST.get('Email')
+                Phone = request.POST.get('Phone')
+                Gender = request.POST.get('Gender')
+                Username = request.POST.get('Username')
+                Avatar = request.FILES['Avatar']
+                if models.Account.objects.filter(email=Email).exists():
+                    return JsonResponse({'isError': True, 'Message': 'Email already exists'})
+                elif models.Account.objects.filter(username=Username).exists():
+                    return JsonResponse({'isError': True, 'Message': 'Username already exists'})
+
+                else:
+                    Staff = models.Account.objects.create_user(username=Username,
+                                                               email=Email, first_name=FirstName, last_name=LastName, phone=Phone, gender=Gender, is_member=False, avatar=Avatar, password="123")
+                    Staff.save()
+
+                    message = {
+                        'isError': False,
+                        'Message': 'New Staff has been successfuly registered'
+                    }
+
+                    return JsonResponse(message, status=200)
+            if type == "get":
+                try:
+                    Staff = models.Account.objects.filter(
+                        is_member=False)
+                    message = []
+                    for i in range(0, len(Staff)):
+                        message.append({
+                            'id': Staff[i].id,
+                            'first_name': Staff[i].first_name,
+                            'last_name': Staff[i].last_name,
+                            'name': Staff[i].first_name + ' ' + Staff[i].last_name,
+                            'email': Staff[i].email,
+                            'phone': Staff[i].phone,
+                            'gender': Staff[i].gender,
+                            'username': Staff[i].username,
+                            'date_joined': Staff[i].date_joined,
+                            'avatar': str(Staff[i].avatar),
+                            'is_active': Staff[i].is_active,
+                        })
+                    return JsonResponse({'isError': False, 'Message': message}, status=200)
+                except Exception as error:
+                    return JsonResponse({'Message': str(error)+". Please contact ICT office", 'isError': True, }, status=200)
+
+    else:
+
+        if request.method == 'GET':
+            try:
+                Staff = models.Account.objects.get(id=id)
+
+                message = {
+                    'id': Staff.id,
+                    'first_name': Staff.first_name,
+                    'last_name': Staff.last_name,
+                    'email': Staff.email,
+                    'phone': Staff.phone,
+                    'gender': Staff.gender,
+                    'username': Staff.username,
+                    'avatar': str(Staff.avatar)
+                }
+                return JsonResponse({'isError': False, 'Message': message}, status=200)
+
+            except Exception as error:
+                return JsonResponse({'Message': str(error)+". Please contact ICT office", 'isError': True, }, status=200)
+
+        # Delete Member
+        if request.method == 'DELETE':
+
+            try:
+                StaffDelete = models.Account.objects.get(id=id)
+                StaffDelete.delete()
+                message = {
+                    'isError': False,
+                    'Message': 'Staff has been successfully deleted'
+                }
+                return JsonResponse(message, status=200)
+            except RestrictedError:
+                return JsonResponse({'isError': True, 'Message': 'Cannot delete, becouse it is restricted'}, status=200)
+
+        # Update Staff
+        if request.method == 'POST':
+            FirstName = request.POST.get('FName')
+            LastName = request.POST.get('LName')
+            Email = request.POST.get('Email')
+            Phone = request.POST.get('Phone')
+            Gender = request.POST.get('Gender')
+            Username = request.POST.get('Username')
+            try:
+                GetStaff = models.Account.objects.get(id=id)
+                if models.Account.objects.filter(email=Email).exists() and GetStaff.email != Email:
+                    return JsonResponse({'isError': True, 'Message': 'Email already exists'})
+                elif models.Account.objects.filter(username=Username).exists() and GetStaff.username != Username:
+                    return JsonResponse({'isError': True, 'Message': 'Username already exists'})
+                else:
+                    GetStaff.first_name = FirstName
+                    GetStaff.last_name = LastName
+                    GetStaff.username = Username
+                    GetStaff.email = Email
+                    GetStaff.phone = Phone
+                    GetStaff.gender = Gender
+                    GetStaff.save()
+                    return JsonResponse({'isError': False, 'Message': 'Staff has been successfully updated'}, status=200)
+            except Exception as error:
+
+                return JsonResponse({'Message': str(error)+". Please contact ICT office", 'isError': True, }, status=200)

@@ -8,10 +8,15 @@ urlpatterns = [
     path('add_member', views.add_member, name='add_member'),
     path('staff_list', views.staff_list, name='staff_list'),
     path('add_staff', views.add_staff, name='add_staff'),
+    path('Author', views.Author, name='Author'),
+    path('Category', views.Category, name='Category'),
+    path('Book', views.Book, name='Book'),
 
 
 
     # Data
     path('manage_member/<int:id>', views.ManageMember, name='manage_members'),
     path('manage_staff/<int:id>', views.ManageStaff, name='ManageStaff'),
+    path('manage_author/<int:id>', views.ManageAuthor, name='ManageAuthor'),
+    path('manage_category/<int:id>', views.ManageCategory, name='ManageCategory'),
 ]

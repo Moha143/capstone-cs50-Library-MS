@@ -58,6 +58,26 @@ def staff_list(request):
 def add_staff(request):
     return render(request, 'Library Panel/Account/add-staff.html')
 
+
+@login_required(login_url='Login')
+def Author(request):
+    return render(request, 'Library Panel/Library/Author.html')
+
+
+@login_required(login_url='Login')
+def Category(request):
+    return render(request, 'Library Panel/Library/Category.html')
+
+
+@login_required(login_url='Login')
+def Book(request):
+    return render(request, 'Library Panel/Library/Book.html')
+
+
+@login_required(login_url='Login')
+def add_staff(request):
+    return render(request, 'Library Panel/Account/add-staff.html')
+
 # Data Management
 # View Actions
 
@@ -334,6 +354,209 @@ def ManageStaff(request, id):
                     GetStaff.gender = Gender
                     GetStaff.save()
                     return JsonResponse({'isError': False, 'Message': 'Staff has been successfully updated'}, status=200)
+            except Exception as error:
+
+                return JsonResponse({'Message': str(error)+". Please contact ICT office", 'isError': True, }, status=200)
+
+
+@login_required(login_url='Login')
+def ManageAuthor(request, id):
+    type = request.POST.get('type')
+    if id == 0:
+        # Get All Auther
+        if request.method == 'GET':
+
+            Author = models.Author.objects.all()
+            message = []
+            for i in range(0, len(Author)):
+                message.append({
+                    'id': Author[i].id,
+                    'name': Author[i].name,
+                    'created_at': Author[i].created_at,
+
+                })
+            return JsonResponse({'isError': False, 'Message': message}, status=200)
+
+        # Post new Staff
+        if request.method == 'POST':
+            if type == "add":
+
+                FullName = request.POST.get('FName')
+
+                if models.Author.objects.filter(name=FullName).exists():
+                    return JsonResponse({'isError': True, 'Message': 'Author Name already exists'})
+
+                else:
+                    Author = models.Author(name=FullName)
+                    Author.save()
+
+                    message = {
+                        'isError': False,
+                        'Message': 'New Author has been successfuly registered'
+                    }
+
+                    return JsonResponse(message, status=200)
+            if type == "get":
+                try:
+                    Author = models.Author.objects.all()
+                    message = []
+                    for i in range(0, len(Author)):
+                        message.append({
+                            'id': Author[i].id,
+                            'name': Author[i].name,
+                            'created_at': Author[i].created_at,
+
+                        })
+                    return JsonResponse({'isError': False, 'Message': message}, status=200)
+
+                except Exception as error:
+                    return JsonResponse({'Message': str(error)+". Please contact ICT office", 'isError': True, }, status=200)
+
+    else:
+
+        if request.method == 'GET':
+            try:
+                Author = models.Author.objects.get(id=id)
+
+                message = {
+                    'id': Author.id,
+                    'name': Author.name,
+
+                }
+                return JsonResponse({'isError': False, 'Message': message}, status=200)
+
+            except Exception as error:
+                return JsonResponse({'Message': str(error)+". Please contact ICT office", 'isError': True, }, status=200)
+
+        # Delete Member
+        if request.method == 'DELETE':
+
+            try:
+                AuthorDelete = models.Author.objects.get(id=id)
+                AuthorDelete.delete()
+                message = {
+                    'isError': False,
+                    'Message': 'Author has been successfully deleted'
+                }
+                return JsonResponse(message, status=200)
+            except RestrictedError:
+                return JsonResponse({'isError': True, 'Message': 'Cannot delete, becouse it is restricted'}, status=200)
+
+        # Update Staff
+        if request.method == 'POST':
+            FullName = request.POST.get('FName')
+
+            try:
+                getAuthor = models.Author.objects.get(id=id)
+                if models.Author.objects.filter(name=FullName).exists() and getAuthor.name != FullName:
+                    return JsonResponse({'isError': True, 'Message': 'Name already exists'})
+
+                else:
+                    getAuthor.name = FullName
+
+                    getAuthor.save()
+                    return JsonResponse({'isError': False, 'Message': 'Author has been successfully updated'}, status=200)
+            except Exception as error:
+
+                return JsonResponse({'Message': str(error)+". Please contact ICT office", 'isError': True, }, status=200)
+
+
+@login_required(login_url='Login')
+def ManageCategory(request, id):
+    type = request.POST.get('type')
+    if id == 0:
+        # Get All Category
+        if request.method == 'GET':
+
+            Category = models.Category.objects.all()
+            message = []
+            for i in range(0, len(Category)):
+                message.append({
+                    'id': Category[i].id,
+                    'name': Category[i].name,
+                    'created_at': Category[i].created_at,
+
+                })
+            return JsonResponse({'isError': False, 'Message': message}, status=200)
+
+        # Post new Category
+        if request.method == 'POST':
+            if type == "add":
+
+                CName = request.POST.get('CName')
+
+                if models.Category.objects.filter(name=CName).exists():
+                    return JsonResponse({'isError': True, 'Message': 'Category Name already exists'})
+
+                else:
+                    Category = models.Category(name=CName)
+                    Category.save()
+
+                    message = {
+                        'isError': False,
+                        'Message': 'New Category has been successfuly registered'
+                    }
+
+                    return JsonResponse(message, status=200)
+            if type == "get":
+                try:
+                    Category = models.Category.objects.all()
+                    message = []
+                    for i in range(0, len(Category)):
+                        message.append({
+                            'id': Category[i].id,
+                            'name': Category[i].name,
+                            'created_at': Category[i].created_at,
+
+                        })
+                    return JsonResponse({'isError': False, 'Message': message}, status=200)
+
+                except Exception as error:
+                    return JsonResponse({'Message': str(error)+". Please contact ICT office", 'isError': True, }, status=200)
+
+    else:
+
+        if request.method == 'GET':
+            try:
+                Category = models.Category.objects.get(id=id)
+
+                message = {
+                    'id': Category.id,
+                    'name': Category.name,
+
+                }
+                return JsonResponse({'isError': False, 'Message': message}, status=200)
+
+            except Exception as error:
+                return JsonResponse({'Message': str(error)+". Please contact ICT office", 'isError': True, }, status=200)
+
+        # Delete Category
+        if request.method == 'DELETE':
+
+            try:
+                DeleteCategory = models.Category.objects.get(id=id)
+                DeleteCategory.delete()
+                message = {
+                    'isError': False,
+                    'Message': 'Category has been successfully deleted'
+                }
+                return JsonResponse(message, status=200)
+            except RestrictedError:
+                return JsonResponse({'isError': True, 'Message': 'Cannot delete, becouse it is restricted'}, status=200)
+
+        # Update Category
+        if request.method == 'POST':
+            CName = request.POST.get('CName')
+
+            try:
+                GetCategory = models.Category.objects.get(id=id)
+                if models.Category.objects.filter(name=CName).exists() and GetCategory.name != CName:
+                    return JsonResponse({'isError': True, 'Message': 'Name already exists'})
+
+                else:
+                    GetCategory.name = CName
+                    GetCategory.save()
+                    return JsonResponse({'isError': False, 'Message': 'Category has been successfully updated'}, status=200)
             except Exception as error:
 
                 return JsonResponse({'Message': str(error)+". Please contact ICT office", 'isError': True, }, status=200)

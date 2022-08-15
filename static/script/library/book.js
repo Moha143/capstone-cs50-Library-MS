@@ -1,38 +1,23 @@
 $(document).ready(function () {
-  AllMembers();
+  AllCategory();
   Avatar = "";
-  $("#save").on("click", function () {
-    const FName = $("#FName").val();
-    const LName = $("#LName").val();
-    const Gender = $("#Gender").val();
-    const Email = $("#Email").val();
-    const Phone = $("#Phone").val();
-    const Username = $("#Username").val();
-    const ID = $("#ID").val();
-    if (FName == "") {
-      toastr.error("error Please Enter First Name");
+  //Show Category Model
+  $("#showModel").on("click", function () {
+    $("#CName").val("");
+  });
+  //Add Category
+  $("#add").on("click", function () {
+    const CName = $("#CName").val();
+    if (CName == "") {
+      toastr.error("error Please Enter Category Name");
       // SendMessage("error", "Enter First Name");
-    } else if (LName == "") {
-      toastr.error("Warning Please Enter Last Name");
-    } else if (Username == "") {
-      toastr.error("Warning Please Enter Username");
-    } else if (Email == "") {
-      toastr.error("Warning Please Enter Email Address");
-    } else if (Gender == "") {
-      toastr.error("Warning Please Select Gender");
-    } else if (Phone == "") {
-      toastr.error("Warning Please Phone Number");
     } else {
       let formData = new FormData();
-      formData.append("FName", FName);
-      formData.append("LName", LName);
-      formData.append("Email", Email);
-      formData.append("Phone", Phone);
-      formData.append("Username", Username);
-      formData.append("Gender", Gender);
+      formData.append("CName", CName);
+      formData.append("type", "add");
       $.ajax({
         method: "POST",
-        url: URLS + "Library/manage_member/" + ID,
+        url: URLS + "Library/manage_category/" + 0,
         headers: { "X-CSRFToken": csrftoken },
         processData: false,
         contentType: false,
@@ -41,8 +26,39 @@ $(document).ready(function () {
         success: function (response) {
           if (!response.isError) {
             toastr.success(response.Message);
-            $("#member").modal("hide");
-            AllMembers();
+            $("#AddCategory").modal("hide");
+            AllCategory();
+          } else {
+            toastr.error(response.Message);
+          }
+        },
+        error: function (response) {},
+      });
+    }
+  });
+  //Update Category
+  $("#update").on("click", function () {
+    const CName = $("#UCName").val();
+    const ID = $("#ID").val();
+    if (CName == "") {
+      toastr.error("error Please Enter Category Name");
+      // SendMessage("error", "Enter First Name");
+    } else {
+      let formData = new FormData();
+      formData.append("CName", CName);
+      $.ajax({
+        method: "POST",
+        url: URLS + "Library/manage_category/" + ID,
+        headers: { "X-CSRFToken": csrftoken },
+        processData: false,
+        contentType: false,
+        data: formData,
+        async: true,
+        success: function (response) {
+          if (!response.isError) {
+            toastr.success(response.Message);
+            $("#UpdateCategory").modal("hide");
+            AllCategory();
           } else {
             toastr.error(response.Message);
           }
@@ -65,7 +81,7 @@ $(document).ready(function () {
         $.ajax({
           async: true,
           method: "DELETE",
-          url: URLS + "Library/manage_member/" + ID,
+          url: URLS + "Library/manage_category/" + ID,
           headers: { "X-CSRFToken": csrftoken },
           async: false,
           success: function (response) {
@@ -73,10 +89,10 @@ $(document).ready(function () {
               swal(response.Message, {
                 icon: "success",
               });
-              AllMembers();
+              AllCategory();
             } else {
               swal(response.Message, {
-                icon: "success",
+                icon: "error",
               });
             }
           },
@@ -88,21 +104,16 @@ $(document).ready(function () {
   });
   $("#datatable tbody").on("click", ".Edit", function () {
     const ID = $(this).attr("ID");
-    $("#member").modal("show");
+    $("#UpdateCategory").modal("show");
     $.ajax({
       async: false,
       method: "GET",
-      url: URLS + "Library/manage_member/" + ID,
+      url: URLS + "Library/manage_category/" + ID,
       headers: { "X-CSRFToken": csrftoken },
       async: false,
       success: function (response) {
         if (!response.isError) {
-          $("#FName").val(response.Message.first_name);
-          $("#LName").val(response.Message.last_name);
-          $("#Gender").val(response.Message.gender);
-          $("#Email").val(response.Message.email);
-          $("#Phone").val(response.Message.phone);
-          $("#Username").val(response.Message.username);
+          $("#UCName").val(response.Message.name);
           $("#ID").val(response.Message.id);
         } else {
           swal(response.Message, {
@@ -114,13 +125,13 @@ $(document).ready(function () {
     });
   });
 
-  function AllMembers() {
+  function AllCategory() {
     var rows = "";
     let formData = new FormData();
     formData.append("type", "get");
     $.ajax({
       method: "POST",
-      url: URLS + "Library/manage_member/" + 0,
+      url: URLS + "Library/manage_category/" + 0,
       headers: { "X-CSRFToken": csrftoken },
       processData: false,
       contentType: false,
@@ -140,18 +151,7 @@ $(document).ready(function () {
     let num = 1;
     if (rows.length > 0) {
       for (var i = 0; i < rows.length; i++) {
-        dataRows.push([
-          rows[i].id,
-          num++,
-          rows[i].username,
-          rows[i].name,
-          rows[i].email,
-          rows[i].phone,
-          rows[i].gender,
-          rows[i].avatar,
-          rows[i].date_joined,
-          rows[i].is_active,
-        ]);
+        dataRows.push([rows[i].id, num++, rows[i].name, rows[i].created_at]);
       }
     }
     let dataTable = $("#datatable").DataTable().clear();
@@ -161,10 +161,6 @@ $(document).ready(function () {
           `<tr><td>${dataRows[i][1]}</td>`,
           `<td>${dataRows[i][2]}</td>`,
           `<td>${dataRows[i][3]}</td>`,
-          `<td>${dataRows[i][4]}</td>`,
-          `<td>${dataRows[i][5]}</td>`,
-          `<td>${dataRows[i][6]}</td>`,
-          `<td>${dataRows[i][8]}</td>`,
           `
           <button type="button" class="btn btn-info Edit" ID=${dataRows[i][0]}> <i class="far fa-edit"></i></button>
           <button type="button" class="btn btn-danger Delete" ID=${dataRows[i][0]}> <i class="fa fa-trash"></i></button>

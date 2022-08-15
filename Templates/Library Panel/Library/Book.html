@@ -1,0 +1,139 @@
+{% extends "../../Base/index.html" %}
+{% load static %}
+
+
+
+{% block Title %}
+<title>Category</title>
+{% endblock %}
+
+{% block Body %}
+ {% include "./../library_nav.html" %} 
+ <div class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1 class="m-0">Category</h1>
+      </div><!-- /.col -->
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="#">Library Store</a></li>
+          <li class="breadcrumb-item active">Category</li>
+        </ol>
+      </div><!-- /.col -->
+    </div><!-- /.row -->
+  </div><!-- /.container-fluid -->
+</div>
+<section class="content">
+    <div class="container-fluid">
+      <!-- Small boxes (Stat box) -->
+      <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <form>
+                        {% csrf_token %}</form>
+                        <button type="button" class="btn btn-primary mb-3" id="showModel"  data-toggle="modal" data-target="#AddCategory">Add Category</button>
+                        
+                    <table id="datatable" class="table table-bordered dt-responsive  nowrap w-100">
+                        <thead>
+                        <tr>
+                            <th>#No</th>
+                            <th>Category Name</th>
+                            <th>Date</th>
+                            <th>Action</th>
+                        
+                        </tr>
+                        </thead>
+        
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- general form elements -->
+          
+      </div>
+      </div>
+      
+    
+    </div><!-- /.container-fluid -->
+  </section>
+  <div class="modal fade" id="AddCategory">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Add Category</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <form>
+                {% csrf_token %}
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Category Name</label>
+                                <input type="text" class="form-control" id="CName" placeholder="Enter Category Name">
+                               
+                              </div>
+                        </div>         
+                    </div>
+                </div>
+                <!-- /.card-body -->
+               
+             
+        </div>
+        <div class="modal-footer justify-content-between">
+          <button type="button" class="btn btn-warning" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="add">Save changes</button>
+        </div>
+      </form>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+  <div class="modal fade" id="UpdateCategory">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Update Category</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <form>
+                {% csrf_token %}
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Category Name</label>
+                                <input type="text" class="form-control" id="UCName" placeholder="Enter Category Name">
+                                <input type="text" class="form-control d-none" hidden id="ID">
+                              </div>
+                        </div>         
+                    </div>
+                </div>
+                <!-- /.card-body -->
+               
+             
+        </div>
+        <div class="modal-footer justify-content-between">
+          <button type="button" class="btn btn-warning" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="update">Save changes</button>
+        </div>
+      </form>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+{% endblock %}
+
+{% block Script %}
+<script src={% static 'script/library/category.js' %}></script>
+{% endblock %}

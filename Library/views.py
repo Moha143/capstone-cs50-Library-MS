@@ -584,21 +584,35 @@ def ManageBook(request, id):
         if request.method == 'POST':
             if type == "add":
 
-                CName = request.POST.get('CName')
+                Title = request.POST.get('Title')
+                Author = request.POST.get('Author')
+                Category = request.POST.get('Category')
+                ISBNs = request.POST.get('ISBN')
+                Coppy = request.POST.get('Coppy')
+                Availabe = request.POST.get('Availabe')
+                Publisher = request.POST.get('Publisher')
+                Summary = request.POST.get('Summary')
 
-                if models.Category.objects.filter(name=CName).exists():
-                    return JsonResponse({'isError': True, 'Message': 'Category Name already exists'})
+                Avatar = request.FILES['Avatar']
+                try:
+                    Author = models.Author.objects.get(id=Author)
+                    Category = models.Category.objects.get(id=Category)
 
-                else:
-                    Category = models.Category(name=CName)
-                    Category.save()
+                    if models.Book.objects.filter(title=Title, author=Author, category=Category, ISBN=ISBNs).exists():
+                        return JsonResponse({'isError': True, 'Message': 'This Book already exists'})
+                    else:
+                        Books = models.Book(title=Title, author=Author, category=Category, ISBN=ISBNs,
+                                            coppy=Coppy, availabe=Availabe, publisher=Publisher, summary=Summary, image=Avatar)
+                        Books.save()
 
-                    message = {
-                        'isError': False,
-                        'Message': 'New Category has been successfuly registered'
-                    }
+                        message = {
+                            'isError': False,
+                            'Message': 'New Books has been added successfuly'
+                        }
 
-                    return JsonResponse(message, status=200)
+                        return JsonResponse(message, status=200)
+                except Exception as error:
+                    return JsonResponse({'Message': str(error)+". Please contact ICT office", 'isError': True, }, status=200)
             if type == "get":
                 try:
                     Book = models.Book.objects.all()
@@ -612,7 +626,6 @@ def ManageBook(request, id):
                             'copy': Book[i].copy,
                             'available': Book[i].available,
                             'created_at': Book[i].created_at,
-
                         })
                     return JsonResponse({'isError': False, 'Message': message}, status=200)
 

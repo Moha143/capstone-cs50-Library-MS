@@ -16,7 +16,7 @@ $(document).ready(function () {
     Author();
     Category();
   });
-  //Add Category
+  //Add Book
   $("#add").on("click", function () {
     const Title = $("#Title").val();
     const Author = $("#Author").val();
@@ -69,7 +69,7 @@ $(document).ready(function () {
       } else {
         $.ajax({
           method: "POST",
-          url: URLS + "Library/manage_category/" + 0,
+          url: URLS + "Library/manage_book/" + 0,
           headers: { "X-CSRFToken": csrftoken },
           processData: false,
           contentType: false,
@@ -101,7 +101,7 @@ $(document).ready(function () {
       formData.append("CName", CName);
       $.ajax({
         method: "POST",
-        url: URLS + "Library/manage_category/" + ID,
+        url: URLS + "Library/manage_book/" + ID,
         headers: { "X-CSRFToken": csrftoken },
         processData: false,
         contentType: false,
@@ -134,7 +134,7 @@ $(document).ready(function () {
         $.ajax({
           async: true,
           method: "DELETE",
-          url: URLS + "Library/manage_category/" + ID,
+          url: URLS + "Library/manage_book/" + ID,
           headers: { "X-CSRFToken": csrftoken },
           async: false,
           success: function (response) {
@@ -161,7 +161,7 @@ $(document).ready(function () {
     $.ajax({
       async: false,
       method: "GET",
-      url: URLS + "Library/manage_category/" + ID,
+      url: URLS + "Library/manage_book/" + ID,
       headers: { "X-CSRFToken": csrftoken },
       async: false,
       success: function (response) {
@@ -184,7 +184,7 @@ $(document).ready(function () {
     formData.append("type", "get");
     $.ajax({
       method: "POST",
-      url: URLS + "Library/manage_category/" + 0,
+      url: URLS + "Library/manage_book/" + 0,
       headers: { "X-CSRFToken": csrftoken },
       processData: false,
       contentType: false,
@@ -223,6 +223,10 @@ $(document).ready(function () {
           `<tr><td>${dataRows[i][1]}</td>`,
           `<td>${dataRows[i][2]}</td>`,
           `<td>${dataRows[i][3]}</td>`,
+          `<td>${dataRows[i][4]}</td>`,
+          `<td>${dataRows[i][5]}</td>`,
+          `<td>${dataRows[i][6]}</td>`,
+          `<td>${dataRows[i][7]}</td>`,
           `
           <button type="button" class="btn btn-info Edit" ID=${dataRows[i][0]}> <i class="far fa-edit"></i></button>
           <button type="button" class="btn btn-danger Delete" ID=${dataRows[i][0]}> <i class="fa fa-trash"></i></button>

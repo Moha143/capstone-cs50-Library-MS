@@ -699,3 +699,135 @@ def ManageBook(request, id):
             except Exception as error:
 
                 return JsonResponse({'Message': str(error)+". Please contact ICT office", 'isError': True, }, status=200)
+@login_required(login_url='Login')
+def ManageBookBorrow(request, id):
+    type = request.POST.get('type')
+    if id == "0":
+
+        # Post new Book
+        if request.method == 'POST':
+            if type == "add":
+
+                Title = request.POST.get('Title')
+                Author = request.POST.get('Author')
+                Category = request.POST.get('Category')
+                ISBNs = request.POST.get('ISBN')
+                Coppy = request.POST.get('Coppy')
+                Available = request.POST.get('Available')
+                Publisher = request.POST.get('Publisher')
+                Summary = request.POST.get('Summary')
+
+                Avatar = request.FILES['Avatar']
+                try:
+                    Author = models.Author.objects.get(id=Author)
+                    Category = models.Category.objects.get(id=Category)
+
+                    if models.Book.objects.filter(title=Title, author=Author, category=Category, ISBN=ISBNs).exists():
+                        return JsonResponse({'isError': True, 'Message': 'This Book already exists'})
+                    else:
+                        Books = models.Book(title=Title, author=Author, category=Category, ISBN=ISBNs,
+                                            copy=Coppy, available=Available, publisher=Publisher, summary=Summary, image=Avatar)
+                        Books.save()
+
+                        message = {
+                            'isError': False,
+                            'Message': 'New Books has been added successfuly'
+                        }
+
+                        return JsonResponse(message, status=200)
+                except Exception as error:
+                    return JsonResponse({'Message': str(error)+". Please contact ICT office", 'isError': True, }, status=200)
+            if type == "get":
+                try:
+                    Book = models.Book.objects.all()
+                    message = []
+                    for i in range(0, len(Book)):
+                        message.append({
+                            'id': Book[i].id,
+                            'title': Book[i].title,
+                            'author': Book[i].author.name,
+                            'category': Book[i].category.name,
+                            'copy': Book[i].copy,
+                            'available': Book[i].available,
+                            'created_at': Book[i].created_at,
+
+                        })
+                    return JsonResponse({'isError': False, 'Message': message}, status=200)
+
+                except Exception as error:
+                    return JsonResponse({'Message': str(error)+". Please contact ICT office", 'isError': True, }, status=200)
+
+    else:
+
+        if request.method == 'GET':
+            try:
+                Book = models.Book.objects.get(id=id)
+
+                message = {
+                    'id': Book.id,
+                    'title': Book.title,
+                    'summary': Book.summary,
+                    'available': Book.available,
+                    'ISBN': Book.ISBN,
+                    'copy': Book.copy,
+                    'summary': Book.summary,
+                    'publisher': Book.publisher,
+                    'authorid': Book.author.id,
+                    'authorname': Book.author.name,
+                    'categoryid': Book.category.id,
+                    'categoryname': Book.category.name,
+                    'categoryname': Book.category.name,
+                    'image': str(Book.image),
+                }
+                return JsonResponse({'isError': False, 'Message': message}, status=200)
+
+            except Exception as error:
+                return JsonResponse({'Message': str(error)+". Please contact ICT office", 'isError': True, }, status=200)
+
+        # Delete Book
+        if request.method == 'DELETE':
+
+            try:
+                DeleteBook = models.Book.objects.get(id=id)
+                DeleteBook.delete()
+                message = {
+                    'isError': False,
+                    'Message': 'Book has been successfully deleted'
+                }
+                return JsonResponse(message, status=200)
+            except RestrictedError:
+                return JsonResponse({'isError': True, 'Message': 'Cannot delete, becouse it is restricted'}, status=200)
+
+        # Update Category
+        if request.method == 'POST':
+            Title = request.POST.get('Title')
+            author = request.POST.get('Author')
+            category = request.POST.get('Category')
+            ISBNs = request.POST.get('ISBN')
+            Coppy = request.POST.get('Coppy')
+            Available = request.POST.get('Available')
+            Publisher = request.POST.get('Publisher')
+            Summary = request.POST.get('Summary')
+
+            try:
+
+                Author = models.Author.objects.get(id=author)
+                Category = models.Category.objects.get(id=category)
+                GetBook = models.Book.objects.get(id=id)
+                if models.Book.objects.filter(title=Title, author=Author, category=Category, ISBN=ISBNs).exists() and GetBook.title != Title and GetBook.author != Author and GetBook.category != Category and GetBook.ISBN != ISBNs:
+                    return JsonResponse({'isError': True, 'Message': 'This Book  already exists'})
+
+                else:
+                    GetBook.title = Title
+                    GetBook.author = Author
+                    GetBook.category = Category
+                    GetBook.ISBN = ISBNs
+                    GetBook.copy = Coppy
+                    GetBook.available = Available
+                    GetBook.publisher = Publisher
+                    GetBook.summary = Summary
+                    GetBook.save()
+                    return JsonResponse({'isError': False, 'Message': 'Book has been successfully updated'}, status=200)
+            except Exception as error:
+
+                return JsonResponse({'Message': str(error)+". Please contact ICT office", 'isError': True, }, status=200)

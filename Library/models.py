@@ -62,8 +62,8 @@ class Borrow(models.Model):
     status = models.CharField(max_length=20)
     start_date = models.DateField()
     end_date = models.DateField()
-    Author = models.ForeignKey(
-        Author, on_delete=models.RESTRICT)
+    Book = models.ForeignKey(
+        Book, on_delete=models.RESTRICT)
     Member = models.ForeignKey(
         Account, on_delete=models.RESTRICT)
     created_at = models.DateTimeField(default=datetime.datetime.today)
@@ -75,6 +75,7 @@ class Borrow(models.Model):
 
 class Fine(models.Model):
     amount = models.CharField(max_length=100)
+    paid = models.CharField(max_length=100)
     borrow = models.ForeignKey(
         Borrow, on_delete=models.RESTRICT)
 

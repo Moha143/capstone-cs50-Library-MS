@@ -1,5 +1,6 @@
 
 import datetime
+import uuid
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 # Create your models here.
@@ -37,7 +38,8 @@ class Category(models.Model):
 
 
 class Book(models.Model):
-    title = models.CharField(max_length=500,null=True)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    title = models.CharField(max_length=500, null=True)
     summary = models.CharField(max_length=500, null=True)
     author = models.ForeignKey(
         Author, on_delete=models.RESTRICT)

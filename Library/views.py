@@ -75,6 +75,11 @@ def Book(request):
 
 
 @login_required(login_url='Login')
+def BookDetail(request, id):
+    return render(request, 'Library Panel/Library/BookDetail.html', {'BookID': id})
+
+
+@login_required(login_url='Login')
 def add_staff(request):
     return render(request, 'Library Panel/Account/add-staff.html')
 
@@ -565,22 +570,9 @@ def ManageCategory(request, id):
 @login_required(login_url='Login')
 def ManageBook(request, id):
     type = request.POST.get('type')
-    if id == 0:
-        # Get All Category
-        if request.method == 'GET':
+    if id == "0":
 
-            Category = models.Category.objects.all()
-            message = []
-            for i in range(0, len(Category)):
-                message.append({
-                    'id': Category[i].id,
-                    'name': Category[i].name,
-                    'created_at': Category[i].created_at,
-
-                })
-            return JsonResponse({'isError': False, 'Message': message}, status=200)
-
-        # Post new Category
+        # Post new Book
         if request.method == 'POST':
             if type == "add":
 
@@ -626,6 +618,7 @@ def ManageBook(request, id):
                             'copy': Book[i].copy,
                             'available': Book[i].available,
                             'created_at': Book[i].created_at,
+
                         })
                     return JsonResponse({'isError': False, 'Message': message}, status=200)
 
@@ -636,27 +629,38 @@ def ManageBook(request, id):
 
         if request.method == 'GET':
             try:
-                Category = models.Category.objects.get(id=id)
+                Book = models.Book.objects.get(id=id)
 
                 message = {
-                    'id': Category.id,
-                    'name': Category.name,
-
+                    'id': Book.id,
+                    'title': Book.title,
+                    'summary': Book.summary,
+                    'available': Book.available,
+                    'ISBN': Book.ISBN,
+                    'copy': Book.copy,
+                    'summary': Book.summary,
+                    'publisher': Book.publisher,
+                    'authorid': Book.author.id,
+                    'authorname': Book.author.name,
+                    'categoryid': Book.category.id,
+                    'categoryname': Book.category.name,
+                    'categoryname': Book.category.name,
+                    'image': str(Book.image),
                 }
                 return JsonResponse({'isError': False, 'Message': message}, status=200)
 
             except Exception as error:
                 return JsonResponse({'Message': str(error)+". Please contact ICT office", 'isError': True, }, status=200)
 
-        # Delete Category
+        # Delete Book
         if request.method == 'DELETE':
 
             try:
-                DeleteCategory = models.Category.objects.get(id=id)
-                DeleteCategory.delete()
+                DeleteBook = models.Book.objects.get(id=id)
+                DeleteBook.delete()
                 message = {
                     'isError': False,
-                    'Message': 'Category has been successfully deleted'
+                    'Message': 'Book has been successfully deleted'
                 }
                 return JsonResponse(message, status=200)
             except RestrictedError:
@@ -664,17 +668,34 @@ def ManageBook(request, id):
 
         # Update Category
         if request.method == 'POST':
-            CName = request.POST.get('CName')
+            Title = request.POST.get('Title')
+            author = request.POST.get('Author')
+            category = request.POST.get('Category')
+            ISBNs = request.POST.get('ISBN')
+            Coppy = request.POST.get('Coppy')
+            Available = request.POST.get('Available')
+            Publisher = request.POST.get('Publisher')
+            Summary = request.POST.get('Summary')
 
             try:
-                GetCategory = models.Category.objects.get(id=id)
-                if models.Category.objects.filter(name=CName).exists() and GetCategory.name != CName:
-                    return JsonResponse({'isError': True, 'Message': 'Name already exists'})
+
+                Author = models.Author.objects.get(id=author)
+                Category = models.Category.objects.get(id=category)
+                GetBook = models.Book.objects.get(id=id)
+                if models.Book.objects.filter(title=Title, author=Author, category=Category, ISBN=ISBNs).exists() and GetBook.title != Title and GetBook.author != Author and GetBook.category != Category and GetBook.ISBN != ISBNs:
+                    return JsonResponse({'isError': True, 'Message': 'This Book  already exists'})
 
                 else:
-                    GetCategory.name = CName
-                    GetCategory.save()
-                    return JsonResponse({'isError': False, 'Message': 'Category has been successfully updated'}, status=200)
+                    GetBook.title = Title
+                    GetBook.author = Author
+                    GetBook.category = Category
+                    GetBook.ISBN = ISBNs
+                    GetBook.copy = Coppy
+                    GetBook.available = Available
+                    GetBook.publisher = Publisher
+                    GetBook.summary = Summary
+                    GetBook.save()
+                    return JsonResponse({'isError': False, 'Message': 'Book has been successfully updated'}, status=200)
             except Exception as error:
 
                 return JsonResponse({'Message': str(error)+". Please contact ICT office", 'isError': True, }, status=200)

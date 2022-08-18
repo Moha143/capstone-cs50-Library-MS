@@ -34,7 +34,7 @@
             <form>
               {% csrf_token %}</form>
             <button type="button" class="btn btn-primary mb-3" id="showModel" data-toggle="modal"
-              data-target="#AddBook">Add Book Borrow</button>
+              data-target="#AddBorrow">Add Book Borrow</button>
 
             <table id="datatable" class="table table-bordered dt-responsive  nowrap w-100">
               <thead>
@@ -42,10 +42,10 @@
                   <th>#No</th>
                   <th>Member Name</th>
                   <th>BookName</th>
+                  <th>Author</th>
+                  <th>Category</th>
                   <th>StartDate</th>
-                  <th>SDate</th>
-                 
-                  <th>Date</th>
+                  <th>EndDate</th>
                   <th>Action</th>
 
                 </tr>
@@ -63,11 +63,11 @@
 
   </div><!-- /.container-fluid -->
 </section>
-<div class="modal fade" id="AddBook">
+<div class="modal fade" id="AddBorrow">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title">Add Category</h4>
+        <h4 class="modal-title">Add Book Borrow</h4>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -77,87 +77,49 @@
           {% csrf_token %}
           <div class="card-body">
             <div class="row">
-              <div class="col-md-4">
+              <div class="col-md-6">
                 <div class="form-group">
-                  <label for="exampleInputEmail1">Book title</label>
-                  <input type="text" class="form-control" id="Title" placeholder="Enter Book Title">
-
-
-                </div>
-              </div>
-              <div class="col-md-4">
-                <div class="form-group">
-                  <label>Author</label>
-                  <select class="form-control" id="Author">
-
+                  <label> Member Name</label>
+                  <select class="form-control" id="Member">
 
                   </select>
                 </div>
               </div>
-              <div class="col-md-4">
-                <div class="form-group">
-                  <label> Category</label>
-                  <select class="form-control" id="Category">
 
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>Book Name</label>
+                  <select class="form-control" id="Book">
                   </select>
                 </div>
               </div>
+
             </div>
             <div class="row">
               <div class="col-md-4">
                 <div class="form-group">
-                  <label for="exampleInputEmail1">ISBN</label>
-                  <input type="text" class="form-control" id="ISBN" placeholder="Enter ISBN ">
-
-                </div>
-              </div>
-              <div class="col-md-4">
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Coppy</label>
-                  <input type="number" class="form-control" id="Coppy" placeholder="Enter Number of coppies">
+                  <label for="exampleInputEmail1">Start Date</label>
+                  <input type="date" class="form-control" id="Start">
 
                 </div>
               </div>
               <div class="col-md-4">
                 <div class="form-group">
-                  <label for="exampleInputEmail1">Available</label>
-                  <input type="text" class="form-control" id="Available" placeholder="Enter Number of Availabe coppies">
+                  <label for="exampleInputEmail1">End Date</label>
+                  <input type="date" class="form-control" id="End">
+
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Number of Book</label>
+                  <input type="text" class="form-control" id="NBook" placeholder="Enter Number ">
 
                 </div>
               </div>
 
             </div>
-            <div class="row">
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Publisher</label>
-                  <input type="text" class="form-control" id="Publisher" placeholder="Enter Publisher ">
 
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label for="exampleInputFile">Cover Book</label>
-                  <div class="input-group">
-                    <div class="custom-file">
-                      <input type="file" class="custom-file-input" id="Avatar">
-                      <label class="custom-file-label" for="AvatarName">Choose Book Image</label>
-                    </div>
-
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-12">
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Summary</label>
-                  <textarea class="form-control" rows="3" id="Summary" placeholder="Enter .."></textarea>
-
-                </div>
-              </div>
-
-            </div>
 
           </div>
           <!-- /.card-body -->
@@ -174,108 +136,10 @@
   </div>
   <!-- /.modal-dialog -->
 </div>
-<div class="modal fade" id="UpdateBook">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title">Update Book</h4>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form>
-          {% csrf_token %}
-          <div class="card-body">
-            <div class="row">
-              <div class="col-md-4">
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Book title</label>
-                  <input type="text" class="form-control" id="UTitle" placeholder="Enter Book Title">
-                  <input type="text" class="form-control d-none" id="ID">
 
-
-                </div>
-              </div>
-              <div class="col-md-4">
-                <div class="form-group">
-                  <label>Author</label>
-                  <select class="form-control" id="UAuthor">
-
-
-                  </select>
-                </div>
-              </div>
-              <div class="col-md-4">
-                <div class="form-group">
-                  <label> Category</label>
-                  <select class="form-control" id="UCategory">
-
-                  </select>
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-3">
-                <div class="form-group">
-                  <label for="exampleInputEmail1">ISBN</label>
-                  <input type="text" class="form-control" id="UISBN" placeholder="Enter ISBN ">
-
-                </div>
-              </div>
-              <div class="col-md-3">
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Coppy</label>
-                  <input type="number" class="form-control" id="UCoppy" placeholder="Enter Number of coppies">
-
-                </div>
-              </div>
-              <div class="col-md-3">
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Available</label>
-                  <input type="text" class="form-control" id="UAvailable"
-                    placeholder="Enter Number of Availabe coppies">
-
-                </div>
-              </div>
-              <div class="col-md-3">
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Publisher</label>
-                  <input type="text" class="form-control" id="UPublisher" placeholder="Enter Publisher ">
-
-                </div>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col-md-12">
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Summary</label>
-                  <textarea class="form-control" rows="3" id="USummary" placeholder="Enter Summary "></textarea>
-
-                </div>
-              </div>
-
-            </div>
-
-          </div>
-          <!-- /.card-body -->
-
-
-      </div>
-      <div class="modal-footer justify-content-between">
-        <button type="button" class="btn btn-warning" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" id="update">Save changes</button>
-      </div>
-      </form>
-    </div>
-    <!-- /.modal-content -->
-  </div>
-  <!-- /.modal-dialog -->
-</div>
 
 {% endblock %}
 
 {% block Script %}
-<script src={% static 'script/library/book.js' %}></script>
+<script src={% static 'script/library/borrow.js' %}></script>
 {% endblock %}

@@ -60,6 +60,7 @@ class Book(models.Model):
 
 class Borrow(models.Model):
     status = models.CharField(max_length=20)
+    NBook = models.CharField(max_length=20)
     start_date = models.DateField()
     end_date = models.DateField()
     Book = models.ForeignKey(

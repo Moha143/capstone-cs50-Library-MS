@@ -1,3 +1,5 @@
+
+from datetime import datetime
 from django.contrib.auth import login, authenticate,  logout
 from django.shortcuts import render, redirect
 from . import models
@@ -72,6 +74,11 @@ def Category(request):
 @login_required(login_url='Login')
 def Book(request):
     return render(request, 'Library Panel/Library/Book.html')
+
+
+@login_required(login_url='Login')
+def Borrow(request):
+    return render(request, 'Library Panel/Library/Borrow.html')
 
 
 @login_required(login_url='Login')
@@ -157,6 +164,20 @@ def ManageMember(request, id):
                             'date_joined': Members[i].date_joined,
                             'avatar': str(Members[i].avatar),
                             'is_active': Members[i].is_active,
+                        })
+                    return JsonResponse({'isError': False, 'Message': message}, status=200)
+                except Exception as error:
+                    return JsonResponse({'Message': str(error)+" Something is wrong please contact ICT office", 'isError': True, }, status=200)
+            if type == "getmember":
+                try:
+                    Members = models.Account.objects.filter(
+                        is_member=True)
+                    message = []
+                    for i in range(0, len(Members)):
+                        message.append({
+                            'id': Members[i].id,
+                            'name': Members[i].first_name + ' ' + Members[i].last_name,
+
                         })
                     return JsonResponse({'isError': False, 'Message': message}, status=200)
                 except Exception as error:
@@ -699,58 +720,52 @@ def ManageBook(request, id):
             except Exception as error:
 
                 return JsonResponse({'Message': str(error)+". Please contact ICT office", 'isError': True, }, status=200)
+
+
 @login_required(login_url='Login')
 def ManageBookBorrow(request, id):
     type = request.POST.get('type')
-    if id == "0":
+    if id == 0:
 
         # Post new Book
         if request.method == 'POST':
             if type == "add":
+                Book = request.POST.get('Book')
+                Start = request.POST.get('Start')
+                End = request.POST.get('End')
+                Member = request.POST.get('Member')
+                NBook = request.POST.get('NBook')
 
-                Title = request.POST.get('Title')
-                Author = request.POST.get('Author')
-                Category = request.POST.get('Category')
-                ISBNs = request.POST.get('ISBN')
-                Coppy = request.POST.get('Coppy')
-                Available = request.POST.get('Available')
-                Publisher = request.POST.get('Publisher')
-                Summary = request.POST.get('Summary')
-
-                Avatar = request.FILES['Avatar']
                 try:
-                    Author = models.Author.objects.get(id=Author)
-                    Category = models.Category.objects.get(id=Category)
+                    MemberID = models.Account.objects.get(id=Member)
+                    Bookss = models.Book.objects.get(id=Book)
+                    Books = models.Borrow(
+                        status="Borrow", Member=MemberID, Book=Bookss, start_date=Start, end_date=End, NBook=NBook)
+                    Books.save()
 
-                    if models.Book.objects.filter(title=Title, author=Author, category=Category, ISBN=ISBNs).exists():
-                        return JsonResponse({'isError': True, 'Message': 'This Book already exists'})
-                    else:
-                        Books = models.Book(title=Title, author=Author, category=Category, ISBN=ISBNs,
-                                            copy=Coppy, available=Available, publisher=Publisher, summary=Summary, image=Avatar)
-                        Books.save()
+                    message = {
+                        'isError': False,
+                        'Message': 'New Books has been added successfuly'
+                    }
 
-                        message = {
-                            'isError': False,
-                            'Message': 'New Books has been added successfuly'
-                        }
-
-                        return JsonResponse(message, status=200)
+                    return JsonResponse(message, status=200)
                 except Exception as error:
                     return JsonResponse({'Message': str(error)+". Please contact ICT office", 'isError': True, }, status=200)
             if type == "get":
                 try:
-                    Book = models.Book.objects.all()
+                    Borrow = models.Borrow.objects.all()
                     message = []
-                    for i in range(0, len(Book)):
+                    for i in range(0, len(Borrow)):
                         message.append({
-                            'id': Book[i].id,
-                            'title': Book[i].title,
-                            'author': Book[i].author.name,
-                            'category': Book[i].category.name,
-                            'copy': Book[i].copy,
-                            'available': Book[i].available,
-                            'created_at': Book[i].created_at,
-
+                            'id': Borrow[i].id,
+                            'BookName': Borrow[i].Book.title,
+                            'member': Borrow[i].Member.first_name + ' ' + Borrow[i].Member.first_name,
+                            'author': Borrow[i].Book.author.name,
+                            'BookID': Borrow[i].Book.id,
+                            'category': Borrow[i].Book.category.name,
+                            'start': PreviewDate(str(Borrow[i].start_date), False),
+                            'end': PreviewDate(str(Borrow[i].end_date), False),
+                            'created_at': PreviewDate(Borrow[i].created_at,True),
                         })
                     return JsonResponse({'isError': False, 'Message': message}, status=200)
 
@@ -761,7 +776,7 @@ def ManageBookBorrow(request, id):
 
         if request.method == 'GET':
             try:
-                Book = models.Book.objects.get(id=id)
+                Book = models.Borrow.objects.get(id=id)
 
                 message = {
                     'id': Book.id,
@@ -831,3 +846,21 @@ def ManageBookBorrow(request, id):
             except Exception as error:
 
                 return JsonResponse({'Message': str(error)+". Please contact ICT office", 'isError': True, }, status=200)
+
+
+def PreviewDate(date_string, is_datetime):
+    if is_datetime:
+        new_date = date_string
+        date_string = new_date.strftime("%a") + ', ' + new_date.strftime(
+            "%b") + ' ' + str(new_date.day) + ', ' + str(new_date.year) + '  ' + new_date.strftime("%I") + ':' + new_date.strftime("%M") + ':' + new_date.strftime("%S") + ' ' + new_date.strftime("%p")
+    else:
+        date_string = str(date_string)
+        date_string = date_string.split('-')
+
+        new_date = datetime(int(date_string[0]), int(
+            date_string[1]), int(date_string[2]))
+
+        date_string = new_date.strftime("%a") + ', ' + new_date.strftime(
+            "%b") + ' ' + str(new_date.day) + ', ' + str(new_date.year)
+
+    return date_string

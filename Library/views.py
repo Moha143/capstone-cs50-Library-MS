@@ -739,16 +739,20 @@ def ManageBookBorrow(request, id):
                 try:
                     MemberID = models.Account.objects.get(id=Member)
                     Bookss = models.Book.objects.get(id=Book)
-                    Books = models.Borrow(
-                        status="Borrow", Member=MemberID, Book=Bookss, start_date=Start, end_date=End, NBook=NBook)
-                    Books.save()
+                    if NBook <= Bookss.available:
+                        Books = models.Borrow(
+                            status="Borrow", Member=MemberID, Book=Bookss, start_date=Start, end_date=End, NBook=NBook)
+                        Books.save()
 
-                    message = {
-                        'isError': False,
-                        'Message': 'New Books has been added successfuly'
-                    }
+                        message = {
+                            'isError': False,
+                            'Message': 'New Books has been added successfuly'
+                        }
 
-                    return JsonResponse(message, status=200)
+                        return JsonResponse(message, status=200)
+
+                    else:
+                        return JsonResponse({'Message': ". This number is not available", 'isError': True, }, status=200)
                 except Exception as error:
                     return JsonResponse({'Message': str(error)+". Please contact ICT office", 'isError': True, }, status=200)
             if type == "get":
@@ -765,7 +769,7 @@ def ManageBookBorrow(request, id):
                             'category': Borrow[i].Book.category.name,
                             'start': PreviewDate(str(Borrow[i].start_date), False),
                             'end': PreviewDate(str(Borrow[i].end_date), False),
-                            'created_at': PreviewDate(Borrow[i].created_at,True),
+                            'created_at': PreviewDate(Borrow[i].created_at, True),
                         })
                     return JsonResponse({'isError': False, 'Message': message}, status=200)
 
@@ -776,75 +780,70 @@ def ManageBookBorrow(request, id):
 
         if request.method == 'GET':
             try:
-                Book = models.Borrow.objects.get(id=id)
+                BookBorrow = models.Borrow.objects.get(id=id)
 
                 message = {
-                    'id': Book.id,
-                    'title': Book.title,
-                    'summary': Book.summary,
-                    'available': Book.available,
-                    'ISBN': Book.ISBN,
-                    'copy': Book.copy,
-                    'summary': Book.summary,
-                    'publisher': Book.publisher,
-                    'authorid': Book.author.id,
-                    'authorname': Book.author.name,
-                    'categoryid': Book.category.id,
-                    'categoryname': Book.category.name,
-                    'categoryname': Book.category.name,
-                    'image': str(Book.image),
+                    'id': BookBorrow.id,
+                    'status': BookBorrow.status,
+                    'NBook': BookBorrow.NBook,
+                    'start_date': BookBorrow.start_date,
+                    'end_date': BookBorrow.end_date,
+                    'BookID': BookBorrow.Book.id,
+                    'Member': BookBorrow.Member.id,
+                    'is_fine': BookBorrow.is_fine,
                 }
                 return JsonResponse({'isError': False, 'Message': message}, status=200)
 
             except Exception as error:
                 return JsonResponse({'Message': str(error)+". Please contact ICT office", 'isError': True, }, status=200)
 
-        # Delete Book
+        # Delete Book Borrow
         if request.method == 'DELETE':
 
             try:
-                DeleteBook = models.Book.objects.get(id=id)
-                DeleteBook.delete()
+                DeleteBorrow = models.Borrow.objects.get(id=id)
+                DeleteBorrow.delete()
                 message = {
                     'isError': False,
-                    'Message': 'Book has been successfully deleted'
+                    'Message': 'Book Borrow has been successfully deleted'
                 }
                 return JsonResponse(message, status=200)
             except RestrictedError:
                 return JsonResponse({'isError': True, 'Message': 'Cannot delete, becouse it is restricted'}, status=200)
 
-        # Update Category
+        # Update Book Borrow
         if request.method == 'POST':
-            Title = request.POST.get('Title')
-            author = request.POST.get('Author')
-            category = request.POST.get('Category')
-            ISBNs = request.POST.get('ISBN')
-            Coppy = request.POST.get('Coppy')
-            Available = request.POST.get('Available')
-            Publisher = request.POST.get('Publisher')
-            Summary = request.POST.get('Summary')
 
+            Book = request.POST.get('Book')
+            Start = request.POST.get('Start')
+            End = request.POST.get('End')
+            Member = request.POST.get('Member')
+            NBook = int(request.POST.get('NBook'))
             try:
+                MemberID = models.Account.objects.get(id=Member)
+                Bookss = models.Book.objects.get(id=Book)
+                gitBookBorrow = models.Borrow.objects.get(id=id)
+                if NBook <= int(Bookss.available):
+                    gitBookBorrow.Member = MemberID
+                    gitBookBorrow.Book = Bookss
+                    gitBookBorrow.NBook = NBook
+                    gitBookBorrow.start_date = Start
+                    gitBookBorrow.end_date = End
+                    available = int(Bookss.available)-NBook
+                    Bookss.available = available
+                    Bookss.save()
+                    gitBookBorrow.save()
 
-                Author = models.Author.objects.get(id=author)
-                Category = models.Category.objects.get(id=category)
-                GetBook = models.Book.objects.get(id=id)
-                if models.Book.objects.filter(title=Title, author=Author, category=Category, ISBN=ISBNs).exists() and GetBook.title != Title and GetBook.author != Author and GetBook.category != Category and GetBook.ISBN != ISBNs:
-                    return JsonResponse({'isError': True, 'Message': 'This Book  already exists'})
+                    message = {
+                        'isError': False,
+                        'Message': ' Book Borrow has been updated successfuly'
+                    }
+
+                    return JsonResponse(message, status=200)
 
                 else:
-                    GetBook.title = Title
-                    GetBook.author = Author
-                    GetBook.category = Category
-                    GetBook.ISBN = ISBNs
-                    GetBook.copy = Coppy
-                    GetBook.available = Available
-                    GetBook.publisher = Publisher
-                    GetBook.summary = Summary
-                    GetBook.save()
-                    return JsonResponse({'isError': False, 'Message': 'Book has been successfully updated'}, status=200)
+                    return JsonResponse({'Message': ". This number is not available", 'isError': True, }, status=200)
             except Exception as error:
-
                 return JsonResponse({'Message': str(error)+". Please contact ICT office", 'isError': True, }, status=200)
 
 

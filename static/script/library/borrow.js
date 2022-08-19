@@ -14,7 +14,7 @@ $(document).ready(function () {
     Member();
     Book();
   });
-  //Add Book
+  //Add Book Borrow
   $("#add").on("click", function () {
     const Start = $("#Start").val();
     const End = $("#End").val();
@@ -44,7 +44,7 @@ $(document).ready(function () {
       formData.append("Book", Book);
       formData.append("NBook", NBook);
       formData.append("type", "add");
-      if (End > Start) {
+      if (Start > End) {
         toastr.error("error Start Date  must less dhan End Date");
       } else {
         $.ajax({
@@ -69,6 +69,63 @@ $(document).ready(function () {
       }
     }
   });
+
+  //Update Book Borrow
+  $("#update").on("click", function () {
+    const Start = $("#UStart").val();
+    const End = $("#UEnd").val();
+    const NBook = $("#UNBook").val();
+    const Member = $("#UMember").val();
+    const Book = $("#UBook").val();
+    const ID = $("#ID").val();
+
+    if (Member == "") {
+      toastr.error("error Please Enter Member name");
+      // SendMessage("error", "Enter First Name");
+    } else if (Book == "") {
+      toastr.error("error Please Select Book ");
+      // SendMessage("error", "Enter First Name");
+    } else if (Start == "") {
+      toastr.error("error Please Enter Start Date");
+      // SendMessage("error", "Enter First Name");
+    } else if (End == "") {
+      toastr.error("error Please Enter End Date");
+      // SendMessage("error", "Enter First Name");
+    } else if (NBook == "") {
+      toastr.error("error Please Enter  number of book");
+    } else {
+      let formData = new FormData();
+      formData.append("Start", Start);
+      formData.append("End", End);
+      formData.append("Member", Member);
+      formData.append("Book", Book);
+      formData.append("NBook", NBook);
+      if (Start > End) {
+        toastr.error("error Start Date  must less dhan End Date");
+      } else {
+        $.ajax({
+          method: "POST",
+          url: URLS + "Library/manage_bookborrow/" + ID,
+          headers: { "X-CSRFToken": csrftoken },
+          processData: false,
+          contentType: false,
+          data: formData,
+          async: true,
+          success: function (response) {
+            if (!response.isError) {
+              toastr.success(response.Message);
+              $("#UpdateBorrow").modal("hide");
+              AllBookBorrow();
+            } else {
+              toastr.error(response.Message);
+            }
+          },
+          error: function (response) {},
+        });
+      }
+    }
+  });
+
 
   $("#datatable tbody").on("click", ".Delete", function () {
     const ID = $(this).attr("ID");
@@ -106,7 +163,7 @@ $(document).ready(function () {
   });
   $("#datatable tbody").on("click", ".Edit", function () {
     const ID = $(this).attr("ID");
-    $("#UpdateBook").modal("show");
+    $("#UpdateBorrow").modal("show");
     $.ajax({
       async: false,
       method: "GET",
@@ -117,17 +174,11 @@ $(document).ready(function () {
         if (!response.isError) {
           Member();
           Book();
-          $("#UTitle").val(response.Message.title);
-          $("#UAuthor").val(response.Message.authorid);
-
-          $("#UCategory").val(response.Message.categoryid);
-
-          $("#UISBN").val(response.Message.ISBN);
-          $("#UCoppy").val(response.Message.copy);
-          $("#UAvailable").val(response.Message.available);
-          $("#UPublisher").val(response.Message.publisher);
-          $("#UPublisher").val(response.Message.publisher);
-          $("#USummary").val(response.Message.summary);
+          $("#UMember").val(response.Message.Member);
+          $("#UBook").val(response.Message.BookID);
+          $("#UNBook").val(response.Message.NBook);
+          $("#UEnd").val(response.Message.end_date);
+          $("#UStart").val(response.Message.start_date);
           $("#ID").val(response.Message.id);
         } else {
           swal(response.Message, {

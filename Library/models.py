@@ -82,3 +82,14 @@ class Fine(models.Model):
 
     class Meta:
         db_table = 'fine'
+
+
+class Reading(models.Model):
+    time_in = models.TimeField()
+    time_out = models.TimeField()
+    Member = models.ForeignKey(
+        Account, on_delete=models.RESTRICT)
+    created_at = models.DateTimeField(default=datetime.datetime.today)
+
+    class Meta:
+        db_table = 'reading'

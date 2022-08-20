@@ -12,44 +12,34 @@ $(document).ready(function () {
     $("#NBook").val("");
 
     Member();
-    Book();
   });
-  //Add Book Borrow
+  //Add Reading Books
   $("#add").on("click", function () {
-    const Start = $("#Start").val();
-    const End = $("#End").val();
-    const NBook = $("#NBook").val();
+    const time_in = $("#In").val();
+    const time_out = $("#Out").val();
     const Member = $("#Member").val();
-    const Book = $("#Book").val();
 
     if (Member == "") {
       toastr.error("error Please Enter Member name");
       // SendMessage("error", "Enter First Name");
-    } else if (Book == "") {
-      toastr.error("error Please Select Book ");
+    } else if (time_in == "") {
+      toastr.error("error Please Time in ");
       // SendMessage("error", "Enter First Name");
-    } else if (Start == "") {
-      toastr.error("error Please Enter Start Date");
+    } else if (time_out == "") {
+      toastr.error("error Please Enter time out ");
       // SendMessage("error", "Enter First Name");
-    } else if (End == "") {
-      toastr.error("error Please Enter End Date");
-      // SendMessage("error", "Enter First Name");
-    } else if (NBook == "") {
-      toastr.error("error Please Enter  number of book");
     } else {
       let formData = new FormData();
-      formData.append("Start", Start);
-      formData.append("End", End);
+      formData.append("time_in", time_in);
+      formData.append("time_out", time_out);
       formData.append("Member", Member);
-      formData.append("Book", Book);
-      formData.append("NBook", NBook);
       formData.append("type", "add");
-      if (Start > End) {
-        toastr.error("error Start Date  must less dhan End Date");
+      if (time_in > time_out) {
+        toastr.error("error Sorry Time in  must less then time out");
       } else {
         $.ajax({
           method: "POST",
-          url: URLS + "Library/manage_bookborrow/" + 0,
+          url: URLS + "Library/manage_reading/" + 0,
           headers: { "X-CSRFToken": csrftoken },
           processData: false,
           contentType: false,
@@ -58,7 +48,7 @@ $(document).ready(function () {
           success: function (response) {
             if (!response.isError) {
               toastr.success(response.Message);
-              $("#AddBorrow").modal("hide");
+              $("#AddReading").modal("hide");
               AllBookBorrow();
             } else {
               toastr.error(response.Message);
@@ -69,43 +59,33 @@ $(document).ready(function () {
       }
     }
   });
-
-  //Update Book Borrow
+  //Update Reading book
   $("#update").on("click", function () {
-    const Start = $("#UStart").val();
-    const End = $("#UEnd").val();
-    const NBook = $("#UNBook").val();
+    const time_in = $("#UIn").val();
+    const time_out = $("#UOut").val();
     const Member = $("#UMember").val();
-    const Book = $("#UBook").val();
-    const ID = $("#ID").val();
+    const ID = $("#UMember").val();
 
     if (Member == "") {
       toastr.error("error Please Enter Member name");
       // SendMessage("error", "Enter First Name");
-    } else if (Book == "") {
-      toastr.error("error Please Select Book ");
+    } else if (time_in == "") {
+      toastr.error("error Please Time in ");
       // SendMessage("error", "Enter First Name");
-    } else if (Start == "") {
-      toastr.error("error Please Enter Start Date");
+    } else if (time_out == "") {
+      toastr.error("error Please Enter time out ");
       // SendMessage("error", "Enter First Name");
-    } else if (End == "") {
-      toastr.error("error Please Enter End Date");
-      // SendMessage("error", "Enter First Name");
-    } else if (NBook == "") {
-      toastr.error("error Please Enter  number of book");
     } else {
       let formData = new FormData();
-      formData.append("Start", Start);
-      formData.append("End", End);
+      formData.append("time_in", time_in);
+      formData.append("time_out", time_out);
       formData.append("Member", Member);
-      formData.append("Book", Book);
-      formData.append("NBook", NBook);
-      if (Start > End) {
-        toastr.error("error Start Date  must less dhan End Date");
+      if (time_in > time_out) {
+        toastr.error("error Sorry Time in  must less then time out");
       } else {
         $.ajax({
           method: "POST",
-          url: URLS + "Library/manage_bookborrow/" + ID,
+          url: URLS + "Library/manage_reading/" + ID,
           headers: { "X-CSRFToken": csrftoken },
           processData: false,
           contentType: false,
@@ -114,7 +94,7 @@ $(document).ready(function () {
           success: function (response) {
             if (!response.isError) {
               toastr.success(response.Message);
-              $("#UpdateBorrow").modal("hide");
+              $("#UpdateReading").modal("hide");
               AllBookBorrow();
             } else {
               toastr.error(response.Message);
@@ -139,7 +119,7 @@ $(document).ready(function () {
         $.ajax({
           async: true,
           method: "DELETE",
-          url: URLS + "Library/manage_bookborrow/" + ID,
+          url: URLS + "Library/manage_reading/" + ID,
           headers: { "X-CSRFToken": csrftoken },
           async: false,
           success: function (response) {
@@ -162,22 +142,19 @@ $(document).ready(function () {
   });
   $("#datatable tbody").on("click", ".Edit", function () {
     const ID = $(this).attr("ID");
-    $("#UpdateBorrow").modal("show");
+    $("#UpdateReading").modal("show");
     $.ajax({
       async: false,
       method: "GET",
-      url: URLS + "Library/manage_bookborrow/" + ID,
+      url: URLS + "Library/manage_reading/" + ID,
       headers: { "X-CSRFToken": csrftoken },
       async: false,
       success: function (response) {
         if (!response.isError) {
           Member();
-          Book();
-          $("#UMember").val(response.Message.Member);
-          $("#UBook").val(response.Message.BookID);
-          $("#UNBook").val(response.Message.NBook);
-          $("#UEnd").val(response.Message.end_date);
-          $("#UStart").val(response.Message.start_date);
+          $("#UMember").val(response.Message.member);
+          $("#UIn").val(response.Message.time_in);
+          $("#UOut").val(response.Message.time_out);
           $("#ID").val(response.Message.id);
         } else {
           swal(response.Message, {
@@ -188,36 +165,14 @@ $(document).ready(function () {
       error: function (response) {},
     });
   });
-  $("#datatable tbody").on("click", ".Show", function () {
-    const ID = $(this).attr("ID");
-    if (ID != "" && ID != undefined) {
-      $.ajax({
-        async: false,
-        method: "GET",
-        url: URLS + "Library/manage_bookborrow/" + ID,
-        headers: { "X-CSRFToken": csrftoken },
-        async: false,
-        success: function (response) {
-          if (!response.isError) {
-            sessionStorage.setItem("Borrow", JSON.stringify(response.Message));
-            window.location.replace(URLS + "Library/Print_Book_Borrow");
-          } else {
-            swal(response.Message, {
-              icon: "error",
-            });
-          }
-        },
-        error: function (response) {},
-      });
-    }
-  });
+
   function AllBookBorrow() {
     var rows = "";
     let formData = new FormData();
     formData.append("type", "get");
     $.ajax({
       method: "POST",
-      url: URLS + "Library/manage_bookborrow/" + 0,
+      url: URLS + "Library/manage_reading/" + 0,
       headers: { "X-CSRFToken": csrftoken },
       processData: false,
       contentType: false,
@@ -241,13 +196,9 @@ $(document).ready(function () {
           rows[i].id,
           num++,
           rows[i].member,
-          rows[i].BookName,
-          rows[i].author,
-          rows[i].category,
-          rows[i].NBook,
-          rows[i].Status,
-          rows[i].start,
-          rows[i].end,
+          rows[i].Phone,
+          rows[i].time_in,
+          rows[i].time_out,
           rows[i].created_at,
         ]);
       }
@@ -262,9 +213,6 @@ $(document).ready(function () {
           `<td>${dataRows[i][4]}</td>`,
           `<td>${dataRows[i][5]}</td>`,
           `<td>${dataRows[i][6]}</td>`,
-          `<td>${dataRows[i][7]}</td>`,
-          `<td>${dataRows[i][8]}</td>`,
-          `<td>${dataRows[i][9]}</td>`,
           `
           <button type="button" class="btn btn-info Edit" ID='${dataRows[i][0]}'> <i class="far fa-edit"></i></button>
           <button type="button" class="btn btn-danger Delete" ID='${dataRows[i][0]}'> <i class="fa fa-trash"></i></button>
@@ -308,42 +256,6 @@ $(document).ready(function () {
       }
       $("#Member").html(dataRow);
       $("#UMember").html(dataRow);
-    } else {
-    }
-  }
-  function Book() {
-    var rows = "";
-    let formData = new FormData();
-    formData.append("type", "get");
-    $.ajax({
-      method: "POST",
-      url: URLS + "Library/manage_book/" + 0,
-      processData: false,
-      contentType: false,
-      data: formData,
-      headers: { "X-CSRFToken": csrftoken },
-      async: false,
-      success: function (response) {
-        rows = response.Message;
-      },
-      error: function (response) {},
-    });
-
-    var dataRow = "";
-    if (rows.length > 0) {
-      dataRow = `<option value=''>Select Book</option>`;
-      for (var i = 0; i < rows.length; i++) {
-        dataRow +=
-          `
-          <option value='` +
-          rows[i].id +
-          `'>` +
-          rows[i].title +
-          `</option>
-          `;
-      }
-      $("#Book").html(dataRow);
-      $("#UBook").html(dataRow);
     } else {
     }
   }

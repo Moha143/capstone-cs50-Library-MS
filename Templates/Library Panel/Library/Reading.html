@@ -4,7 +4,7 @@
 
 
 {% block Title %}
-<title>Book</title>
+<title>Reading Books</title>
 {% endblock %}
 
 {% block Body %}
@@ -13,12 +13,12 @@
   <div class="container-fluid">
     <div class="row mb-2">
       <div class="col-sm-6">
-        <h1 class="m-0">Book</h1>
+        <h1 class="m-0">Reading</h1>
       </div><!-- /.col -->
       <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
           <li class="breadcrumb-item"><a href="#">Library Store</a></li>
-          <li class="breadcrumb-item active">Book Borrow</li>
+          <li class="breadcrumb-item active">Reading Books</li>
         </ol>
       </div><!-- /.col -->
     </div><!-- /.row -->
@@ -34,20 +34,17 @@
             <form>
               {% csrf_token %}</form>
             <button type="button" class="btn btn-primary mb-3" id="showModel" data-toggle="modal"
-              data-target="#AddBorrow">Add Book Borrow</button>
+              data-target="#AddReading">Add Book Borrow</button>
 
             <table id="datatable" class="table table-bordered dt-responsive  nowrap w-100">
               <thead>
                 <tr>
                   <th>#No</th>
                   <th>Member Name</th>
-                  <th>BookName</th>
-                  <th>Author</th>
-                  <th>Category</th>
-                  <th>NBOOK</th>
-                  <th>Status</th>
-                  <th>StartDate</th>
-                  <th>EndDate</th>
+                  <th>Phone</th>
+                  <th>Time In</th>
+                  <th>Time out</th>
+                  <th>Created Date</th>
                   <th>Action</th>
 
                 </tr>
@@ -65,11 +62,11 @@
 
   </div><!-- /.container-fluid -->
 </section>
-<div class="modal fade" id="AddBorrow">
+<div class="modal fade" id="AddReading">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title">Add Book Borrow</h4>
+        <h4 class="modal-title">Add Member Reading Book</h4>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -79,7 +76,7 @@
           {% csrf_token %}
           <div class="card-body">
             <div class="row">
-              <div class="col-md-6">
+              <div class="col-md-12">
                 <div class="form-group">
                   <label> Member Name</label>
                   <select class="form-control" id="Member">
@@ -90,39 +87,19 @@
 
               <div class="col-md-6">
                 <div class="form-group">
-                  <label>Book Name</label>
-                  <select class="form-control" id="Book">
-                  </select>
+                  <label>Time In</label>
+                  <input type="time" class="form-control" id="In" />
                 </div>
               </div>
-
-            </div>
-            <div class="row">
-              <div class="col-md-4">
+              <div class="col-md-6">
                 <div class="form-group">
-                  <label for="exampleInputEmail1">Start Date</label>
-                  <input type="date" class="form-control" id="Start">
-
-                </div>
-              </div>
-              <div class="col-md-4">
-                <div class="form-group">
-                  <label for="exampleInputEmail1">End Date</label>
-                  <input type="date" class="form-control" id="End">
-
-                </div>
-              </div>
-              <div class="col-md-4">
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Number of Book</label>
-                  <input type="text" class="form-control" id="NBook" placeholder="Enter Number ">
+                  <label>Time out</label>
+                  <input type="time" class="form-control" id="Out" />
 
                 </div>
               </div>
 
             </div>
-
-
           </div>
           <!-- /.card-body -->
 
@@ -138,12 +115,11 @@
   </div>
   <!-- /.modal-dialog -->
 </div>
-
-<div class="modal fade" id="UpdateBorrow">
+<div class="modal fade" id="UpdateReading">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title">Update Book Borrow</h4>
+        <h4 class="modal-title">Update Member Reading Book</h4>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -153,11 +129,11 @@
           {% csrf_token %}
           <div class="card-body">
             <div class="row">
-              <div class="col-md-6">
+              <div class="col-md-12">
                 <div class="form-group">
                   <label> Member Name</label>
+                  <input type="text" class="form-control d-none" id="ID" />
                   <select class="form-control" id="UMember">
-                  <input type="text" class="form-control d-none"  id="ID">
 
                   </select>
                 </div>
@@ -165,39 +141,19 @@
 
               <div class="col-md-6">
                 <div class="form-group">
-                  <label>Book Name</label>
-                  <select class="form-control" id="UBook">
-                  </select>
+                  <label>Time In</label>
+                  <input type="time" class="form-control" id="UIn" />
                 </div>
               </div>
-
-            </div>
-            <div class="row">
-              <div class="col-md-4">
+              <div class="col-md-6">
                 <div class="form-group">
-                  <label for="exampleInputEmail1">Start Date</label>
-                  <input type="date" class="form-control" id="UStart">
-
-                </div>
-              </div>
-              <div class="col-md-4">
-                <div class="form-group">
-                  <label for="exampleInputEmail1">End Date</label>
-                  <input type="date" class="form-control" id="UEnd">
-
-                </div>
-              </div>
-              <div class="col-md-4">
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Number of Book</label>
-                  <input type="text" class="form-control" id="UNBook" placeholder="Enter Number ">
+                  <label>Time out</label>
+                  <input type="time" class="form-control" id="UOut" />
 
                 </div>
               </div>
 
             </div>
-
-
           </div>
           <!-- /.card-body -->
 
@@ -212,10 +168,6 @@
     <!-- /.modal-content -->
   </div>
   <!-- /.modal-dialog -->
-</div>
-
-{% endblock %}
-
-{% block Script %}
-<script src={% static 'script/library/borrow.js' %}></script>
+</div {% endblock %} {% block Script %} <script src={% static 'script/library/reading.js' %}>
+</script>
 {% endblock %}

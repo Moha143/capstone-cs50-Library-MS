@@ -12,6 +12,8 @@ urlpatterns = [
     path('Category', views.Category, name='Category'),
     path('Book', views.Book, name='Book'),
     path('Borrow', views.Borrow, name='Borrow'),
+    path('Reading', views.Reading, name='Reading'),
+    path('Print_Book_Borrow', views.Print_Book_Borrow, name='Print_Book_Borrow'),
     path('BookDetail/<str:id>', views.BookDetail, name='BookDetail'),
 
 
@@ -23,4 +25,5 @@ urlpatterns = [
     path('manage_category/<int:id>', views.ManageCategory, name='ManageCategory'),
     path('manage_book/<str:id>', views.ManageBook, name='ManageBook'),
     path('manage_bookborrow/<int:id>', views.ManageBookBorrow, name='ManageBookBorrow'),
+    path('manage_reading/<int:id>', views.ManageReading, name='ManageReading'),
 ]

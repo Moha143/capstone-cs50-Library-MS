@@ -82,6 +82,16 @@ def Borrow(request):
 
 
 @login_required(login_url='Login')
+def Reading(request):
+    return render(request, 'Library Panel/Library/Reading.html')
+
+
+@login_required(login_url='Login')
+def Print_Book_Borrow(request):
+    return render(request, 'Library Panel/Library/print_book_borrow.html')
+
+
+@login_required(login_url='Login')
 def BookDetail(request, id):
     return render(request, 'Library Panel/Library/BookDetail.html', {'BookID': id})
 
@@ -734,15 +744,20 @@ def ManageBookBorrow(request, id):
                 Start = request.POST.get('Start')
                 End = request.POST.get('End')
                 Member = request.POST.get('Member')
-                NBook = request.POST.get('NBook')
+                NBook = int(request.POST.get('NBook'))
 
                 try:
                     MemberID = models.Account.objects.get(id=Member)
                     Bookss = models.Book.objects.get(id=Book)
-                    if NBook <= Bookss.available:
-                        Books = models.Borrow(
+
+                    if NBook <= int(Bookss.available):
+                        Available = int(Bookss.available)-NBook
+                        Book = models.Borrow(
                             status="Borrow", Member=MemberID, Book=Bookss, start_date=Start, end_date=End, NBook=NBook)
-                        Books.save()
+
+                        Bookss.available = Available
+                        Book.save()
+                        Bookss.save()
 
                         message = {
                             'isError': False,
@@ -763,6 +778,8 @@ def ManageBookBorrow(request, id):
                         message.append({
                             'id': Borrow[i].id,
                             'BookName': Borrow[i].Book.title,
+                            'NBook': Borrow[i].NBook,
+                            'Status': Borrow[i].status,
                             'member': Borrow[i].Member.first_name + ' ' + Borrow[i].Member.first_name,
                             'author': Borrow[i].Book.author.name,
                             'BookID': Borrow[i].Book.id,
@@ -789,8 +806,16 @@ def ManageBookBorrow(request, id):
                     'start_date': BookBorrow.start_date,
                     'end_date': BookBorrow.end_date,
                     'BookID': BookBorrow.Book.id,
+                    'BookName': BookBorrow.Book.title,
                     'Member': BookBorrow.Member.id,
                     'is_fine': BookBorrow.is_fine,
+                    'Status': BookBorrow.status,
+                    'member': BookBorrow.Member.first_name + ' ' + BookBorrow.Member.first_name,
+                    'Phone': BookBorrow.Member.phone,
+                    'author': BookBorrow.Book.author.name,
+                    'category': BookBorrow.Book.category.name,
+                    'start': PreviewDate(str(BookBorrow.start_date), False),
+                    'end': PreviewDate(str(BookBorrow.end_date), False),
                 }
                 return JsonResponse({'isError': False, 'Message': message}, status=200)
 
@@ -826,11 +851,21 @@ def ManageBookBorrow(request, id):
                 if NBook <= int(Bookss.available):
                     gitBookBorrow.Member = MemberID
                     gitBookBorrow.Book = Bookss
-                    gitBookBorrow.NBook = NBook
                     gitBookBorrow.start_date = Start
                     gitBookBorrow.end_date = End
-                    available = int(Bookss.available)-NBook
-                    Bookss.available = available
+                    if NBook == int(gitBookBorrow.NBook):
+                        available = int(Bookss.available)
+                        av = available
+                    elif NBook > int(gitBookBorrow.NBook):
+                        available = NBook - int(gitBookBorrow.NBook)
+                        av = int(Bookss.available)-available
+
+                    else:
+                        available = int(gitBookBorrow.NBook) - NBook
+                        av = available+int(Bookss.available)
+
+                    Bookss.available = av
+                    gitBookBorrow.NBook = NBook
                     Bookss.save()
                     gitBookBorrow.save()
 
@@ -843,6 +878,112 @@ def ManageBookBorrow(request, id):
 
                 else:
                     return JsonResponse({'Message': ". This number is not available", 'isError': True, }, status=200)
+            except Exception as error:
+                return JsonResponse({'Message': str(error)+". Please contact ICT office", 'isError': True, }, status=200)
+
+
+@login_required(login_url='Login')
+def ManageReading(request, id):
+    type = request.POST.get('type')
+    if id == 0:
+
+        # Post new Book
+        if request.method == 'POST':
+            if type == "add":
+
+                time_in = request.POST.get('time_in')
+                time_out = request.POST.get('time_out')
+                Member = request.POST.get('Member')
+
+                try:
+                    MemberID = models.Account.objects.get(id=Member)
+
+                    Reading = models.Reading(
+                        Member=MemberID, time_in=time_in, time_out=time_out)
+
+                    Reading.save()
+                    message = {
+                        'isError': False,
+                        'Message': MemberID.first_name+" "+MemberID.last_name + ' has been added successfuly reading books'
+                    }
+
+                    return JsonResponse(message, status=200)
+
+                except Exception as error:
+                    return JsonResponse({'Message': str(error)+". Please contact ICT office", 'isError': True, }, status=200)
+            if type == "get":
+                try:
+                    Reading = models.Reading.objects.all()
+                    message = []
+                    for i in range(0, len(Reading)):
+                        message.append({
+                            'id': Reading[i].id,
+                            'member': Reading[i].Member.first_name + ' ' + Reading[i].Member.first_name,
+                            'time_in': Reading[i].time_in,
+                            'time_out': Reading[i].time_out,
+                            'Phone': Reading[i].Member.phone,
+                            'created_at': PreviewDate(Reading[i].created_at, True),
+                        })
+                    return JsonResponse({'isError': False, 'Message': message}, status=200)
+
+                except Exception as error:
+                    return JsonResponse({'Message': str(error)+". Please contact ICT office", 'isError': True, }, status=200)
+
+    else:
+
+        if request.method == 'GET':
+            try:
+                Reading = models.Reading.objects.get(id=id)
+
+                message = {
+                    'id': Reading.id,
+                    'memberName': Reading.Member.first_name + ' ' + Reading.Member.first_name,
+                    'member': Reading.Member.id,
+                    'time_in': Reading.time_in,
+                    'time_out': Reading.time_out,
+                    'Phone': Reading.Member.phone,
+                    'created_at': PreviewDate(Reading.created_at, True),
+                }
+                return JsonResponse({'isError': False, 'Message': message}, status=200)
+
+            except Exception as error:
+                return JsonResponse({'Message': str(error)+". Please contact ICT office", 'isError': True, }, status=200)
+
+        # Delete Book Reading
+        if request.method == 'DELETE':
+
+            try:
+                DeleteReading = models.Reading.objects.get(id=id)
+                DeleteReading.delete()
+                message = {
+                    'isError': False,
+                    'Message': 'Book Reading has been successfully deleted'
+                }
+                return JsonResponse(message, status=200)
+            except RestrictedError:
+                return JsonResponse({'isError': True, 'Message': 'Cannot delete, becouse it is restricted'}, status=200)
+
+        # Update Book Reading
+        if request.method == 'POST':
+
+            time_in = request.POST.get('time_in')
+            time_out = request.POST.get('time_out')
+            Member = request.POST.get('Member')
+            try:
+                MemberID = models.Account.objects.get(id=Member)
+                Reading = models.Reading.objects.get(id=id)
+                Reading.time_in = time_in
+                Reading.time_out = time_out
+
+                Reading.save()
+
+                message = {
+                    'isError': False,
+                    'Message': MemberID.first_name+" "+MemberID.last_name + ' has been updated successfuly reading books'
+                }
+
+                return JsonResponse(message, status=200)
+
             except Exception as error:
                 return JsonResponse({'Message': str(error)+". Please contact ICT office", 'isError': True, }, status=200)
 

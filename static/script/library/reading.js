@@ -1,5 +1,5 @@
 $(document).ready(function () {
-  AllBookBorrow();
+  Reading();
   Avatar = "";
   $("#Avatar").on("change", function (e) {
     Avatar = e.target.files[0];
@@ -49,7 +49,7 @@ $(document).ready(function () {
             if (!response.isError) {
               toastr.success(response.Message);
               $("#AddReading").modal("hide");
-              AllBookBorrow();
+              Reading();
             } else {
               toastr.error(response.Message);
             }
@@ -95,7 +95,7 @@ $(document).ready(function () {
             if (!response.isError) {
               toastr.success(response.Message);
               $("#UpdateReading").modal("hide");
-              AllBookBorrow();
+              Reading();
             } else {
               toastr.error(response.Message);
             }
@@ -127,7 +127,7 @@ $(document).ready(function () {
               swal(response.Message, {
                 icon: "success",
               });
-              AllBookBorrow();
+              Reading();
             } else {
               swal(response.Message, {
                 icon: "error",
@@ -166,7 +166,7 @@ $(document).ready(function () {
     });
   });
 
-  function AllBookBorrow() {
+  function Reading() {
     var rows = "";
     let formData = new FormData();
     formData.append("type", "get");
@@ -216,8 +216,6 @@ $(document).ready(function () {
           `
           <button type="button" class="btn btn-info Edit" ID='${dataRows[i][0]}'> <i class="far fa-edit"></i></button>
           <button type="button" class="btn btn-danger Delete" ID='${dataRows[i][0]}'> <i class="fa fa-trash"></i></button>
-          <button type="button" class="btn btn-primary Show" ID='${dataRows[i][0]}'> <i class="fa fa-print"></i></button>
-
           </td>`,
         ])
         .draw();

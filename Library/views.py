@@ -7,6 +7,9 @@ from . import models
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.db.models.deletion import RestrictedError
+from datetime import datetime
+s = datetime.strptime("13:30", "%H:%M")
+print(s.strftime("%r"))
 
 
 def Login(request):
@@ -916,11 +919,15 @@ def ManageReading(request, id):
                     Reading = models.Reading.objects.all()
                     message = []
                     for i in range(0, len(Reading)):
+                        time_outs = str(Reading[i].time_out).split(
+                            ':')[0] + ':' + str(Reading[i].time_out).split(':')[1]
+                        time_ins = str(Reading[i].time_in).split(
+                            ':')[0] + ':' + str(Reading[i].time_in).split(':')[1]
                         message.append({
                             'id': Reading[i].id,
                             'member': Reading[i].Member.first_name + ' ' + Reading[i].Member.first_name,
-                            'time_in': Reading[i].time_in,
-                            'time_out': Reading[i].time_out,
+                            'time_out': shorttime(time_outs),
+                            'time_in': shorttime(time_ins),
                             'Phone': Reading[i].Member.phone,
                             'created_at': PreviewDate(Reading[i].created_at, True),
                         })
@@ -957,7 +964,7 @@ def ManageReading(request, id):
                 DeleteReading.delete()
                 message = {
                     'isError': False,
-                    'Message': 'Book Reading has been successfully deleted'
+                    'Message': 'Member Reading has been successfully deleted'
                 }
                 return JsonResponse(message, status=200)
             except RestrictedError:
@@ -972,9 +979,9 @@ def ManageReading(request, id):
             try:
                 MemberID = models.Account.objects.get(id=Member)
                 Reading = models.Reading.objects.get(id=id)
+                Reading.Member = MemberID
                 Reading.time_in = time_in
                 Reading.time_out = time_out
-
                 Reading.save()
 
                 message = {
@@ -986,6 +993,43 @@ def ManageReading(request, id):
 
             except Exception as error:
                 return JsonResponse({'Message': str(error)+". Please contact ICT office", 'isError': True, }, status=200)
+
+
+@login_required(login_url='Login')
+def ManageDashboard(request, id):
+    type = request.POST.get('type')
+    if id == 0:
+
+        # Post new Book
+        if request.method == 'POST':
+
+            if type == "getbook":
+                Author = request.POST.get('Author')
+                Category = request.POST.get('Category')
+                try:
+                    BookArgs = {}
+
+                    if Author != 'All':
+                        BookArgs['author'] = Author
+                    if Category != 'All':
+                        BookArgs['category'] = Category
+                    Book = models.Book.objects.filter(**BookArgs)
+                    message = []
+                    for i in range(0, len(Book)):
+                        message.append({
+                            'id': Book[i].id,
+                            'title': Book[i].title,
+                            'author': Book[i].author.name,
+                            'category': Book[i].category.name,
+                            'copy': Book[i].copy,
+                            'available': Book[i].available,
+                            'image': str(Book[i].image),
+                            'created_at': Book[i].created_at,
+                        })
+                    return JsonResponse({'isError': False, 'Message': message}, status=200)
+
+                except Exception as error:
+                    return JsonResponse({'Message': str(error)+". Please contact ICT office", 'isError': True, }, status=200)
 
 
 def PreviewDate(date_string, is_datetime):
@@ -1004,3 +1048,9 @@ def PreviewDate(date_string, is_datetime):
             "%b") + ' ' + str(new_date.day) + ', ' + str(new_date.year)
 
     return date_string
+
+
+def shorttime(time):
+    # s = datetime.strptime(str(time), "%H:%M")
+    s = datetime.strptime(time, "%H:%M")
+    return s.strftime("%r")

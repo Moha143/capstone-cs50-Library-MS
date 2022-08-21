@@ -24,6 +24,8 @@ urlpatterns = [
     path('manage_author/<int:id>', views.ManageAuthor, name='ManageAuthor'),
     path('manage_category/<int:id>', views.ManageCategory, name='ManageCategory'),
     path('manage_book/<str:id>', views.ManageBook, name='ManageBook'),
-    path('manage_bookborrow/<int:id>', views.ManageBookBorrow, name='ManageBookBorrow'),
+    path('manage_bookborrow/<int:id>',
+         views.ManageBookBorrow, name='ManageBookBorrow'),
     path('manage_reading/<int:id>', views.ManageReading, name='ManageReading'),
+    path('manage_dashboard/<int:id>', views.ManageDashboard, name='ManageReading'),
 ]

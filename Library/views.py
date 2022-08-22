@@ -8,8 +8,6 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.db.models.deletion import RestrictedError
 from datetime import datetime
-s = datetime.strptime("13:30", "%H:%M")
-print(s.strftime("%r"))
 
 
 def Login(request):
@@ -37,7 +35,6 @@ def Login(request):
 @login_required(login_url='Login')
 def Main(request):
     user = request.user.is_member
-    # Getch the two letters from the username
     if user:
         return render(request, 'Member Panel/member_dash.html')
     else:
@@ -47,6 +44,11 @@ def Main(request):
 @login_required(login_url='Login')
 def add_member(request):
     return render(request, 'Library Panel/Account/add-member.html')
+
+
+@login_required(login_url='Login')
+def Profile(request):
+    return render(request, 'Base/Profile.html')
 
 
 @login_required(login_url='Login')
@@ -1019,13 +1021,30 @@ def ManageDashboard(request, id):
                         message.append({
                             'id': Book[i].id,
                             'title': Book[i].title,
-                            'author': Book[i].author.name,
-                            'category': Book[i].category.name,
-                            'copy': Book[i].copy,
-                            'available': Book[i].available,
                             'image': str(Book[i].image),
-                            'created_at': Book[i].created_at,
+
                         })
+                    return JsonResponse({'isError': False, 'Message': message}, status=200)
+
+                except Exception as error:
+                    return JsonResponse({'Message': str(error)+". Please contact ICT office", 'isError': True, }, status=200)
+
+            if type == "getusers":
+                try:
+                    member = models.Account.objects.filter(
+                        is_member=True).count()
+                    Staff = models.Account.objects.filter(
+                        is_staff=True).count()
+                    books = models.Book.objects.all().count()
+                    message = []
+                    message.append({
+                        'members': member,
+                        'staff': Staff,
+                        'books': books,
+                        'total': int(Staff)+int(member),
+
+
+                    })
                     return JsonResponse({'isError': False, 'Message': message}, status=200)
 
                 except Exception as error:

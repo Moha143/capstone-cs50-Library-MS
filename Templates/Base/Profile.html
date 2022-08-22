@@ -1,0 +1,79 @@
+{% extends "../Base/index.html" %}
+{% load static %}
+
+
+
+{% block Title %}
+<title>Profile</title>
+<!-- Ekko Lightbox -->
+>
+{% endblock %}
+
+{% block Body %}
+{% if request.user.is_member%}
+{% include "./nav.html" %}
+{%endif %}
+{% if request.user.is_staff%}
+{% include "../Library Panel/library_nav.html" %}
+{%endif %}
+<section class="content">
+    <div class="container-fluid">
+
+
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-6">
+                <form>
+                    {% csrf_token %}</form>
+                <!-- Profile Image -->
+                <div class="card card-primary card-outline">
+                    <div class="card-body box-profile">
+                        <div class="text-center">
+                            <img class="profile-user-img img-fluid img-circle"  src="/media/{{ request.user.avatar }}"
+                                alt="User profile picture">
+                        </div>
+
+                        <h3 class="profile-username text-center">{{ request.user.username }}</h3>
+
+                     
+
+                        <ul class="list-group list-group-unbordered mb-3">
+                            <li class="list-group-item">
+                                <b>Name: {{ request.user.first_name }} {{ request.user.last_name }} </b>
+                            </li>
+                           
+                            <li class="list-group-item">
+                                <b>Email: {{ request.user.email }} </b>
+                            </li>
+                            <li class="list-group-item">
+                                <b>Phone: {{ request.user.phone }} </b>
+                            </li>
+               
+                        </ul>
+
+                      
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+
+               
+            </div>
+            <div class="col-md-3"></div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+        <!-- Main row -->
+
+        <!-- /.row (main row) -->
+    </div><!-- /.container-fluid -->
+</section>
+{% endblock %}
+
+{% block Script %}
+
+
+<script>
+
+</script>
+{% endblock %}

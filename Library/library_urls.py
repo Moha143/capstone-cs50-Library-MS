@@ -14,6 +14,7 @@ urlpatterns = [
     path('Borrow', views.Borrow, name='Borrow'),
     path('Reading', views.Reading, name='Reading'),
     path('Print_Book_Borrow', views.Print_Book_Borrow, name='Print_Book_Borrow'),
+    path('Profile', views.Profile, name='Profile'),
     path('BookDetail/<str:id>', views.BookDetail, name='BookDetail'),
 
 

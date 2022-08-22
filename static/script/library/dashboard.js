@@ -2,6 +2,7 @@ $(document).ready(function () {
   Author();
   Category();
   Book();
+  users();
   function Author() {
     var rows = "";
     let formData = new FormData();
@@ -122,6 +123,32 @@ $(document).ready(function () {
     </div>
         `;
       $("#gallary").html(dataRow);
+    }
+  }
+  function users() {
+    var rows = "";
+    let formData = new FormData();
+    formData.append("type", "getusers");
+    $.ajax({
+      method: "POST",
+      url: URLS + "Library/manage_dashboard/" + 0,
+      processData: false,
+      contentType: false,
+      data: formData,
+      headers: { "X-CSRFToken": csrftoken },
+      async: false,
+      success: function (response) {
+        rows = response.Message;
+        $("#staffs").text(rows[0].staff);
+        $("#members").text(rows[0].members);
+        $("#books").text(rows[0].books);
+      },
+      error: function (response) {},
+    });
+
+    var dataRow = "";
+    if (rows.length > 0) {
+    } else {
     }
   }
 });

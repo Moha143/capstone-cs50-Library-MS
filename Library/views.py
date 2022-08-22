@@ -92,6 +92,11 @@ def Reading(request):
 
 
 @login_required(login_url='Login')
+def Fine(request):
+    return render(request, 'Library Panel/Library/Fine.html')
+
+
+@login_required(login_url='Login')
 def Print_Book_Borrow(request):
     return render(request, 'Library Panel/Library/print_book_borrow.html')
 
@@ -932,6 +937,114 @@ def ManageReading(request, id):
                             'time_in': shorttime(time_ins),
                             'Phone': Reading[i].Member.phone,
                             'created_at': PreviewDate(Reading[i].created_at, True),
+                        })
+                    return JsonResponse({'isError': False, 'Message': message}, status=200)
+
+                except Exception as error:
+                    return JsonResponse({'Message': str(error)+". Please contact ICT office", 'isError': True, }, status=200)
+
+    else:
+
+        if request.method == 'GET':
+            try:
+                Reading = models.Reading.objects.get(id=id)
+
+                message = {
+                    'id': Reading.id,
+                    'memberName': Reading.Member.first_name + ' ' + Reading.Member.first_name,
+                    'member': Reading.Member.id,
+                    'time_in': Reading.time_in,
+                    'time_out': Reading.time_out,
+                    'Phone': Reading.Member.phone,
+                    'created_at': PreviewDate(Reading.created_at, True),
+                }
+                return JsonResponse({'isError': False, 'Message': message}, status=200)
+
+            except Exception as error:
+                return JsonResponse({'Message': str(error)+". Please contact ICT office", 'isError': True, }, status=200)
+
+        # Delete Book Reading
+        if request.method == 'DELETE':
+
+            try:
+                DeleteReading = models.Reading.objects.get(id=id)
+                DeleteReading.delete()
+                message = {
+                    'isError': False,
+                    'Message': 'Member Reading has been successfully deleted'
+                }
+                return JsonResponse(message, status=200)
+            except RestrictedError:
+                return JsonResponse({'isError': True, 'Message': 'Cannot delete, becouse it is restricted'}, status=200)
+
+        # Update Book Reading
+        if request.method == 'POST':
+
+            time_in = request.POST.get('time_in')
+            time_out = request.POST.get('time_out')
+            Member = request.POST.get('Member')
+            try:
+                MemberID = models.Account.objects.get(id=Member)
+                Reading = models.Reading.objects.get(id=id)
+                Reading.Member = MemberID
+                Reading.time_in = time_in
+                Reading.time_out = time_out
+                Reading.save()
+
+                message = {
+                    'isError': False,
+                    'Message': MemberID.first_name+" "+MemberID.last_name + ' has been updated successfuly reading books'
+                }
+
+                return JsonResponse(message, status=200)
+
+            except Exception as error:
+                return JsonResponse({'Message': str(error)+". Please contact ICT office", 'isError': True, }, status=200)
+
+
+@login_required(login_url='Login')
+def ManageFine(request, id):
+    type = request.POST.get('type')
+    if id == 0:
+
+        # Post new Book
+        if request.method == 'POST':
+            if type == "add":
+
+                time_in = request.POST.get('time_in')
+                time_out = request.POST.get('time_out')
+                Member = request.POST.get('Member')
+
+                try:
+                    MemberID = models.Account.objects.get(id=Member)
+
+                    Reading = models.Reading(
+                        Member=MemberID, time_in=time_in, time_out=time_out)
+
+                    Reading.save()
+                    message = {
+                        'isError': False,
+                        'Message': MemberID.first_name+" "+MemberID.last_name + ' has been added successfuly reading books'
+                    }
+
+                    return JsonResponse(message, status=200)
+
+                except Exception as error:
+                    return JsonResponse({'Message': str(error)+". Please contact ICT office", 'isError': True, }, status=200)
+            if type == "get":
+                try:
+                    Fine = models.Fine.objects.all()
+                    message = []
+                    for i in range(0, len(Fine)):
+                        message.append({
+                            'id': Fine[i].id,
+                            'member': Fine[i].borrow.Member.first_name + ' ' + Fine[i].borrow.Member.first_name,
+                            'phone': Fine[i].borrow.Member.phone,
+                            'book': Fine[i].borrow.Book.title,
+                            'amount': Fine[i].amount,
+                            'paid': Fine[i].paid,
+                            'amount': Fine[i].amount,
+
                         })
                     return JsonResponse({'isError': False, 'Message': message}, status=200)
 

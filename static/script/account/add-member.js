@@ -56,12 +56,11 @@ $(document).ready(function () {
             }).then((ok) => {
               if (ok) {
                 window.location.reload();
-              }
-              else{
+              } else {
                 window.location.reload();
               }
             });
-            el
+
             // toastr.success(response.Message);
           } else {
             toastr.error(response.Message);

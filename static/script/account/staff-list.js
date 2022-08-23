@@ -77,7 +77,7 @@ $(document).ready(function () {
               });
             } else {
               swal(response.Message, {
-                icon: "success",
+                icon: "error",
               });
             }
           },

@@ -2,7 +2,7 @@
 from datetime import datetime
 from django.contrib.auth import login, authenticate,  logout
 from django.shortcuts import render, redirect
-from . import models
+from Library import models
 # Create your views here.
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
@@ -102,6 +102,11 @@ def Print_Book_Borrow(request):
 
 
 @login_required(login_url='Login')
+def print_fine(request):
+    return render(request, 'Library Panel/Library/print_fine.html')
+
+
+@login_required(login_url='Login')
 def BookDetail(request, id):
     return render(request, 'Library Panel/Library/BookDetail.html', {'BookID': id})
 
@@ -109,6 +114,11 @@ def BookDetail(request, id):
 @login_required(login_url='Login')
 def add_staff(request):
     return render(request, 'Library Panel/Account/add-staff.html')
+
+
+@login_required(login_url='Login')
+def Add_payment(request):
+    return render(request, 'Library Panel/Library/Add-payment.html')
 
 # Data Management
 # View Actions
@@ -1006,105 +1016,105 @@ def ManageReading(request, id):
 def ManageFine(request, id):
     type = request.POST.get('type')
     if id == 0:
-
-        # Post new Book
-        if request.method == 'POST':
-            if type == "add":
-
-                time_in = request.POST.get('time_in')
-                time_out = request.POST.get('time_out')
-                Member = request.POST.get('Member')
-
-                try:
-                    MemberID = models.Account.objects.get(id=Member)
-
-                    Reading = models.Reading(
-                        Member=MemberID, time_in=time_in, time_out=time_out)
-
-                    Reading.save()
-                    message = {
-                        'isError': False,
-                        'Message': MemberID.first_name+" "+MemberID.last_name + ' has been added successfuly reading books'
-                    }
-
-                    return JsonResponse(message, status=200)
-
-                except Exception as error:
-                    return JsonResponse({'Message': str(error)+". Please contact ICT office", 'isError': True, }, status=200)
-            if type == "get":
-                try:
-                    Fine = models.Fine.objects.all()
-                    message = []
-                    for i in range(0, len(Fine)):
-                        message.append({
-                            'id': Fine[i].id,
-                            'member': Fine[i].borrow.Member.first_name + ' ' + Fine[i].borrow.Member.first_name,
-                            'phone': Fine[i].borrow.Member.phone,
-                            'book': Fine[i].borrow.Book.title,
-                            'amount': Fine[i].amount,
-                            'paid': Fine[i].paid,
-                            'amount': Fine[i].amount,
-
-                        })
-                    return JsonResponse({'isError': False, 'Message': message}, status=200)
-
-                except Exception as error:
-                    return JsonResponse({'Message': str(error)+". Please contact ICT office", 'isError': True, }, status=200)
-
-    else:
-
-        if request.method == 'GET':
+        if type == "get":
             try:
-                Reading = models.Reading.objects.get(id=id)
+                Fine = models.Fine.objects.all()
+                message = []
+                for i in range(0, len(Fine)):
+                    message.append({
+                        'id': Fine[i].id,
+                        'member': Fine[i].borrow.Member.first_name + ' ' + Fine[i].borrow.Member.first_name,
+                        'phone': Fine[i].borrow.Member.phone,
+                        'book': Fine[i].borrow.Book.title,
+                        'amount': "$ " + Fine[i].amount,
+                        'paid': "$ "+Fine[i].paid,
 
-                message = {
-                    'id': Reading.id,
-                    'memberName': Reading.Member.first_name + ' ' + Reading.Member.first_name,
-                    'member': Reading.Member.id,
-                    'time_in': Reading.time_in,
-                    'time_out': Reading.time_out,
-                    'Phone': Reading.Member.phone,
-                    'created_at': PreviewDate(Reading.created_at, True),
-                }
+                    })
+                return JsonResponse({'isError': False, 'Message': message}, status=200)
+
+            except Exception as error:
+                return JsonResponse({'Message': str(error)+". Please contact ICT office", 'isError': True, }, status=200)
+        if type == "memberbook":
+            Member = request.POST.get('Member')
+            try:
+                MemberBook = models.Borrow.objects.filter(
+                    Member=Member, status="Not Returned")
+                message = []
+                for i in range(0, len(MemberBook)):
+                    message.append({
+                        'id': MemberBook[i].id,
+                        'book': MemberBook[i].Book.title,
+                    })
+                return JsonResponse({'isError': False, 'Message': message}, status=200)
+
+            except Exception as error:
+                return JsonResponse({'Message': str(error)+". Please contact ICT office", 'isError': True, }, status=200)
+        if type == "finedetails":
+            Member = request.POST.get('Member')
+            borrow = request.POST.get('borrow')
+            try:
+                Borrowdetail = models.Fine.objects.filter(
+                    borrow=borrow)
+                message = []
+                for i in range(0, len(Borrowdetail)):
+                    message.append({
+                        'id': Borrowdetail[i].id,
+                        'start': PreviewDate(str(Borrowdetail[i].borrow.start_date), False),
+                        'end':  PreviewDate(str(Borrowdetail[i].borrow.end_date), False),
+                        'amount': Borrowdetail[i].amount,
+                        'paid': Borrowdetail[i].paid,
+                        'remaining': float(Borrowdetail[i].amount) - float(Borrowdetail[i].paid),
+                    })
                 return JsonResponse({'isError': False, 'Message': message}, status=200)
 
             except Exception as error:
                 return JsonResponse({'Message': str(error)+". Please contact ICT office", 'isError': True, }, status=200)
 
-        # Delete Book Reading
+    else:
+
+        # Delete Fine
         if request.method == 'DELETE':
 
             try:
-                DeleteReading = models.Reading.objects.get(id=id)
-                DeleteReading.delete()
+                deletefine = models.Fine.objects.get(id=id)
+                deletefine.delete()
                 message = {
                     'isError': False,
-                    'Message': 'Member Reading has been successfully deleted'
+                    'Message': 'Fine  has been successfully deleted'
                 }
                 return JsonResponse(message, status=200)
             except RestrictedError:
                 return JsonResponse({'isError': True, 'Message': 'Cannot delete, becouse it is restricted'}, status=200)
 
-        # Update Book Reading
+        # Adding Fine payment m
         if request.method == 'POST':
-
-            time_in = request.POST.get('time_in')
-            time_out = request.POST.get('time_out')
+            paid = float(request.POST.get('fines'))
+            borrowID = request.POST.get('borrow')
             Member = request.POST.get('Member')
             try:
-                MemberID = models.Account.objects.get(id=Member)
-                Reading = models.Reading.objects.get(id=id)
-                Reading.Member = MemberID
-                Reading.time_in = time_in
-                Reading.time_out = time_out
-                Reading.save()
+                Borrows = models.Borrow.objects.get(id=borrowID)
+                Fine = models.Fine.objects.get(id=id)
+                remaining = float(Fine.amount) - float(Fine.paid)
+                if remaining == 0:
+                    return JsonResponse({'Message': ". Payment already paid", 'isError': True, }, status=200)
+                else:
+                    total = float(Fine.paid)+paid
+                    if total == float(Fine.amount):
+                        Borrows.status = "Returned"
+                        Books = models.Book.objects.get(id=Borrows.Book.id)
+                        av = int(Books.available)+int(Borrows.NBook)
+                        Books.available = av
+                        Books.save()
+                        Borrows.save()
+                    Fine.paid = total
+                    Fine.borrow = Borrows
+                    Fine.save()
+                    message = {
+                        'isError': False,
+                        'Message': Borrows.Member.first_name+" "+Borrows.Member.last_name + ' has paid fine'
+                    }
 
-                message = {
-                    'isError': False,
-                    'Message': MemberID.first_name+" "+MemberID.last_name + ' has been updated successfuly reading books'
-                }
-
-                return JsonResponse(message, status=200)
+                    return JsonResponse(message, status=200)
 
             except Exception as error:
                 return JsonResponse({'Message': str(error)+". Please contact ICT office", 'isError': True, }, status=200)

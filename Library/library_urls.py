@@ -15,7 +15,9 @@ urlpatterns = [
     path('Reading', views.Reading, name='Reading'),
     path('Fine', views.Fine, name='Fine'),
     path('Print_Book_Borrow', views.Print_Book_Borrow, name='Print_Book_Borrow'),
+    path('print_fine', views.print_fine, name='print_fine'),
     path('Profile', views.Profile, name='Profile'),
+    path('Add_payment', views.Add_payment, name='Add_payment'),
     path('BookDetail/<str:id>', views.BookDetail, name='BookDetail'),
 
 

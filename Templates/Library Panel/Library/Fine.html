@@ -33,9 +33,7 @@
           <div class="card-body">
             <form>
               {% csrf_token %}</form>
-            <button type="button" class="btn btn-primary mb-3" id="showModel" data-toggle="modal"
-              data-target="#AddReading">Add Book Reading</button>
-
+          
             <table id="datatable" class="table table-bordered dt-responsive  nowrap w-100">
               <thead>
                 <tr>
@@ -61,112 +59,7 @@
 
   </div><!-- /.container-fluid -->
 </section>
-<div class="modal fade" id="AddReading">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title">Add Member Reading Book</h4>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form>
-          {% csrf_token %}
-          <div class="card-body">
-            <div class="row">
-              <div class="col-md-12">
-                <div class="form-group">
-                  <label> Member Name</label>
-                  <select class="form-control" id="Member">
-
-                  </select>
-                </div>
-              </div>
-
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label>Time In</label>
-                  <input type="time" class="form-control" id="In" />
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label>Time out</label>
-                  <input type="time" class="form-control" id="Out" />
-
-                </div>
-              </div>
-
-            </div>
-          </div>
-          <!-- /.card-body -->
-
-
-      </div>
-      <div class="modal-footer justify-content-between">
-        <button type="button" class="btn btn-warning" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" id="add">Save changes</button>
-      </div>
-      </form>
-    </div>
-    <!-- /.modal-content -->
-  </div>
-  <!-- /.modal-dialog -->
-</div>
-<div class="modal fade" id="UpdateReading">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title">Update Member Reading Book</h4>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form>
-          {% csrf_token %}
-          <div class="card-body">
-            <div class="row">
-              <div class="col-md-12">
-                <div class="form-group">
-                  <label> Member Name</label>
-                  <input type="text" class="form-control d-none" id="ID" />
-                  <select class="form-control" id="UMember">
-
-                  </select>
-                </div>
-              </div>
-
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label>Time In</label>
-                  <input type="time" class="form-control" id="UIn" />
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label>Time out</label>
-                  <input type="time" class="form-control" id="UOut" />
-
-                </div>
-              </div>
-
-            </div>
-          </div>
-          <!-- /.card-body -->
-
-
-      </div>
-      <div class="modal-footer justify-content-between">
-        <button type="button" class="btn btn-warning" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" id="update">Save changes</button>
-      </div>
-      </form>
-    </div>
-    <!-- /.modal-content -->
-  </div>
-  <!-- /.modal-dialog -->
-</div {% endblock %} {% block Script %} <script src={% static 'script/library/fine.js' %}>
+ {% endblock %} 
+ {% block Script %} <script src={% static 'script/library/fine.js' %}>
 </script>
 {% endblock %}

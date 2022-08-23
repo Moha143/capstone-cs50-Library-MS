@@ -6,7 +6,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>BOOK Borrow Reports</title>
+    <title>Fine Reports</title>
     <!-- Bootstrap Css -->
     <link href={% static "assets/css/bootstrap.min.css" %} id="bootstrap-style" rel="stylesheet" type="text/css" />
     <!-- Tempusdominus Bootstrap 4 -->
@@ -117,11 +117,10 @@
     <div class="container-fluid">
         <div class="row">
 
-            <h4 class="text-center text-uppercase font-weight-bold">Borrow Reports</h4>
+            <h4 class="text-center text-uppercase font-weight-bold">Fine Reports</h4>
             <div class="box w-100">
                 <div class="row">
                    
-
                     <div class="col-md-6 mb-2">
                         <p style="float:left; font-weight:bold;"> Member Name: </p> <span id="MName"></span>
                     </div>
@@ -151,7 +150,10 @@
                         <p id="title"><b>Status:</b> <span id="Status"></span></p>
                     </div>
                     <div class="col-6">
-                        <p id="title"><b>Amount of Fine:</b> <span id="fine"></span></p>
+                        <p id="title"><b>Amount of Fine:</b> <span id="amount"></span></p>
+                    </div>
+                    <div class="col-6">
+                        <p id="title"><b>Total Paid:</b> <span id="paid"></span></p>
                     </div>
                 </div>
 
@@ -168,34 +170,26 @@
     <script src={% static "plugins/jquery-ui/jquery-ui.min.js" %}></script>
     <script>
         let BASE_URL = "http://127.0.0.1:8000/";
-        let Borrow = JSON.parse(sessionStorage.getItem("Borrow"));
+        let Fine = JSON.parse(sessionStorage.getItem("Fine"));
         let types = sessionStorage.getItem("type");
         let rowData = ""
-        $('#MName').text(Borrow.member);
-        $('#Author').text(Borrow.author);
-        $('#Book').text(Borrow.BookName);
-        $('#NBook').text(Borrow.NBook);
-        $('#Category').text(Borrow.category);
-        $('#Start').text(Borrow.start);
-        $('#End').text(Borrow.end);
-        $('#Phone').text(Borrow.Phone);
-        $('#Status').text(Borrow.Status);
-        if (Borrow.is_fine == true) {
-            fine = 3 * parseFloat(Borrow.NBook);
-                $('#fine').text("$" + fine);
-        }
-        else {
-
-            $('#fine').text("No fine");
-        }
-
-
-
+        $('#MName').text(Fine.member);
+        $('#Author').text(Fine.author);
+        $('#Book').text(Fine.BookName);
+        $('#NBook').text(Fine.NBook);
+        $('#Category').text(Fine.category);
+        $('#Start').text(Fine.start);
+        $('#End').text(Fine.end);
+        $('#Phone').text(Fine.Phone);
+        $('#Status').text(Fine.Status);
+        $('#paid').text(Fine.paid);
+        $('#amount').text(Fine.amount);
+        
         print();
 
         window.onafterprint = function () {
-            sessionStorage.removeItem("Borrow");
-            window.location.replace(BASE_URL + "Library/Borrow");
+            sessionStorage.removeItem("Fine");
+            window.location.replace(BASE_URL + "Library/Fine");
 
         }
 

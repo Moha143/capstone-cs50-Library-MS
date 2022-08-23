@@ -1,0 +1,127 @@
+{% extends "../../Base/index.html" %}
+{% load static %}
+
+
+
+{% block Title %}
+<title>Add Payment</title>
+{% endblock %}
+
+{% block Body %}
+{% include "./../library_nav.html" %}
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0">Add Payment</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Fine</a></li>
+                    <li class="breadcrumb-item active">Add Payment</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<section class="content">
+    <div class="container-fluid">
+        <!-- Small boxes (Stat box) -->
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-6 ml-3">
+                <div>
+
+                    <a href="{% url 'member_list' %}" class="btn btn-danger mb-3">
+                        Go Back
+                    </a>
+                </div>
+                <!-- general form elements -->
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Add Payment</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <!-- form start -->
+                    <form>
+                        {% csrf_token %}
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label>Select Member</label>
+                                <select class="form-control" id="Member">
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Select Book Borrow</label>
+                                <select class="form-control" id="borrow" disabled>
+                                </select>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1">Start Date</label>
+                                        <input type="text" class="form-control" id="start" disabled>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1">End Date</label>
+                                        <input type="text" class="form-control" id="end" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1">Total Amount</label>
+                                        <input type="text" class="form-control" id="tamount" disabled>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1">Total Paid</label>
+                                        <input type="text" class="form-control" id="tpaid" disabled>
+                                        <input type="text" class="form-control d-none" id="ID" disabled>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1">Total Remaining</label>
+                                        <input type="text" class="form-control" id="remaining" disabled>
+                                      
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1">Fine </label>
+                                        <input type="text" class="form-control" id="fines"
+                                            placeholder="Enter Fine Amount">
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+
+                        </div>
+                        <!-- /.card-body -->
+
+                        <div class="card-footer">
+                            <button type="button" class="btn btn-primary" id="save">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+
+        </div><!-- /.container-fluid -->
+</section>
+{% endblock %}
+
+{% block Script %}
+<script src={% static 'script/library/payment.js' %}>
+</script>
+{% endblock %}

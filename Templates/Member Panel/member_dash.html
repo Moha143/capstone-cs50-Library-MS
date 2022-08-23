@@ -5,83 +5,138 @@
 
 {% block Title %}
 <title>Dashboard</title>
+<!-- Ekko Lightbox -->
+<link rel="stylesheet" href={% static "plugins/ekko-lightbox/ekko-lightbox.css" %}>
 {% endblock %}
 
 {% block Body %}
- {% include "./nav.html" %} 
+{% include "./nav.html" %}
 <section class="content">
-    <div class="container-fluid">
-      <!-- Small boxes (Stat box) -->
-      <div class="row">
-        <div class="col-lg-3 col-6">
-          <!-- small box -->
-          <div class="small-box bg-info">
-            <div class="inner">
-              <h3>150</h3>
+  <div class="container-fluid">
+    <!-- Small boxes (Stat box) -->
+    <div class="row mt-3">
 
-              <p>New Orders</p>
-            </div>
-            <div class="icon">
-              <i class="ion ion-bag"></i>
-            </div>
-            <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-          </div>
-        </div>
-        <!-- ./col -->
-        <div class="col-lg-3 col-6">
-          <!-- small box -->
-          <div class="small-box bg-success">
-            <div class="inner">
-              <h3>53<sup style="font-size: 20px">%</sup></h3>
+      <div class="col-md-4">
+        <!-- small box -->
+        <div class="small-box bg-warning">
+          <div class="inner">
+            <h3 id="members"></h3>
 
-              <p>Bounce Rate</p>
-            </div>
-            <div class="icon">
-              <i class="ion ion-stats-bars"></i>
-            </div>
-            <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            <p>Total Members</p>
           </div>
-        </div>
-        <!-- ./col -->
-        <div class="col-lg-3 col-6">
-          <!-- small box -->
-          <div class="small-box bg-warning">
-            <div class="inner">
-              <h3>44</h3>
-
-              <p>User Registrations</p>
-            </div>
-            <div class="icon">
-              <i class="ion ion-person-add"></i>
-            </div>
-            <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+          <div class="icon">
+            <i class="ion ion-person-add"></i>
           </div>
+          <a href="{% url 'member_list' %}" class="small-box-footer">More info <i
+              class="fas fa-arrow-circle-right"></i></a>
         </div>
-        <!-- ./col -->
-        <div class="col-lg-3 col-6">
-          <!-- small box -->
-          <div class="small-box bg-danger">
-            <div class="inner">
-              <h3>65</h3>
-
-              <p>Unique Visitors</p>
-            </div>
-            <div class="icon">
-              <i class="ion ion-pie-graph"></i>
-            </div>
-            <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-          </div>
-        </div>
-        <!-- ./col -->
       </div>
-      <!-- /.row -->
-      <!-- Main row -->
-   
-      <!-- /.row (main row) -->
-    </div><!-- /.container-fluid -->
-  </section>
+      <div class="col-md-4">
+        <!-- small box -->
+        <div class="small-box bg-info">
+          <div class="inner">
+            <h3 id="staffs"></h3>
+
+            <p>Total Staff</p>
+          </div>
+          <div class="icon">
+            <i class="ion ion-person-add"></i>
+          </div>
+          <a href="{% url 'staff_list' %}" class="small-box-footer">More info <i
+              class="fas fa-arrow-circle-right"></i></a>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <!-- small box -->
+        <div class="small-box bg-success">
+          <div class="inner">
+            <h3 id="books"></h3>
+            <p>Total Book</p>
+          </div>
+          <div class="icon">
+            <i class="fa fa-book"></i>
+          </div>
+          <a href="{% url 'Book' %}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+        </div>
+      </div>
+
+      <!-- ./col -->
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-6">
+                <form>
+                  {% csrf_token %}</form>
+                <div class="form-group">
+                  <label>Category</label>
+                  <input type="text" class="form-control d-none" id="ID" />
+                  <select class="form-control" id="Category">
+
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label> Author</label>
+                  <select class="form-control" id="Author">
+                    <input type="text" class="form-control d-none" id="Member" IDs= {{ request.user.id }}>
+
+                  </select>
+                </div>
+              </div>
+
+
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <div class="card card-primary">
+          <div class="card-header">
+            <h4 class="card-title">Book Gallary</h4>
+          </div>
+          <div class="card-body">
+
+            <div>
+              <div class="filter-container p-0 row" id="gallary">
+
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- /.row -->
+    <!-- Main row -->
+
+    <!-- /.row (main row) -->
+  </div><!-- /.container-fluid -->
+</section>
 {% endblock %}
 
 {% block Script %}
+<script src={% static 'script/member/dashboard.js' %}>
 
+</script>
+<!-- Ekko Lightbox -->
+<script src={% static "plugins/ekko-lightbox/ekko-lightbox.min.js" %}></script>
+<script>
+  $(function () {
+    $(document).on('click', '[data-toggle="lightbox"]', function (event) {
+      event.preventDefault();
+      $(this).ekkoLightbox({
+        alwaysShowClose: true
+      });
+    });
+
+
+  })
+</script>
 {% endblock %}

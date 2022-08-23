@@ -33,4 +33,5 @@ urlpatterns = [
     path('manage_fine/<int:id>', views.ManageFine, name='ManageFine'),
     path('manage_reading/<int:id>', views.ManageReading, name='ManageReading'),
     path('manage_dashboard/<int:id>', views.ManageDashboard, name='ManageReading'),
+    path('manage_member_dashbord/<int:id>', views.MemberDashbord, name='MemberDashbord'),
 ]

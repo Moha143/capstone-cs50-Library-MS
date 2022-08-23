@@ -11,7 +11,7 @@
 
 {% block Body %}
 {% if request.user.is_member%}
-{% include "./nav.html" %}
+{% include "../Member Panel/nav.html" %}
 {%endif %}
 {% if request.user.is_staff%}
 {% include "../Library Panel/library_nav.html" %}

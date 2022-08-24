@@ -172,12 +172,19 @@ $(document).ready(function () {
       success: function (response) {
         if (!response.isError) {
           rows = response.Message[0];
-          $("#tamount").val(rows.amount);
-          $("#tpaid").val(rows.paid);
-          $("#end").val(rows.end);
-          $("#start").val(rows.start);
-          $("#remaining").val(rows.remaining);
-          $("#ID").val(rows.id);
+          if (rows!= "") {
+            rows = response.Message[0];
+            $("#tamount").val(rows.amount);
+            $("#tpaid").val(rows.paid);
+            $("#end").val(rows.end);
+            $("#start").val(rows.start);
+            $("#remaining").val(rows.remaining);
+            $("#ID").val(rows.id);
+          } else {
+            swal("Sorry This member does not have fine", {
+              icon: "error",
+            });
+          }
         } else {
           $("#tamount").val("");
           $("#tpaid").val("");

@@ -83,29 +83,37 @@ $(document).ready(function () {
   }
   function Book() {
     var rows = "";
+    let Authors = $("#Author").val();
+    let Category = $("#Category").val();
     let formData = new FormData();
     formData.append("type", "getbook");
-    formData.append("Category", $("#Category").val());
-    formData.append("Author", $("#Author").val());
+    formData.append("Category", Category);
+    formData.append("Author", Authors);
+    if (
+      Category == null ||
+      Category == undefined ||
+      Authors == null ||
+      Authors == ""
+    ) {
+    } else {
+      $.ajax({
+        method: "POST",
+        url: URLS + "Library/manage_dashboard/" + 0,
+        processData: false,
+        contentType: false,
+        data: formData,
+        headers: { "X-CSRFToken": csrftoken },
+        async: false,
+        success: function (response) {
+          rows = response.Message;
+        },
+        error: function (response) {},
+      });
 
-    $.ajax({
-      method: "POST",
-      url: URLS + "Library/manage_dashboard/" + 0,
-      processData: false,
-      contentType: false,
-      data: formData,
-      headers: { "X-CSRFToken": csrftoken },
-      async: false,
-      success: function (response) {
-        rows = response.Message;
-      },
-      error: function (response) {},
-    });
-
-    var dataRow = "";
-    if (rows.length > 0) {
-      for (var i = 0; i < rows.length; i++) {
-        dataRow += `
+      var dataRow = "";
+      if (rows.length > 0) {
+        for (var i = 0; i < rows.length; i++) {
+          dataRow += `
           <div class="filtr-item col-ms-2" >
           <a href="/media/${rows[i].image}" data-toggle="lightbox"
             data-title=${rows[i].title}>
@@ -114,15 +122,16 @@ $(document).ready(function () {
           </a>
         </div>
             `;
-      }
-      $("#gallary").html(dataRow);
-    } else {
-      dataRow += `
+        }
+        $("#gallary").html(dataRow);
+      } else {
+        dataRow += `
       <div class="filtr-item col-ms-2" >
      <h4><center>No Data is available</center></h4>
     </div>
         `;
-      $("#gallary").html(dataRow);
+        $("#gallary").html(dataRow);
+      }
     }
   }
   function users() {

@@ -147,8 +147,8 @@ $(document).ready(function () {
       async: false,
       success: function (response) {
         rows = response.Message;
-        $("#staffs").text(rows[0].staff);
-        $("#members").text(rows[0].members);
+        // $("#staffs").text(rows[0].staff);
+        // $("#members").text(rows[0].members);
         $("#books").text(rows[0].books);
       },
       error: function (response) {},

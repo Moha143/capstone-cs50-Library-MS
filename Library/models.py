@@ -79,7 +79,8 @@ class Fine(models.Model):
     paid = models.CharField(max_length=100)
     borrow = models.ForeignKey(
         Borrow, on_delete=models.RESTRICT)
-
+    Member = models.ForeignKey(
+        Account, on_delete=models.RESTRICT)
     class Meta:
         db_table = 'fine'
 

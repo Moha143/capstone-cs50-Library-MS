@@ -119,6 +119,14 @@ def Reading(request):
 
 
 @login_required(login_url='Login')
+def MyReading(request):
+    if request.user.is_member == True:
+        return render(request, 'Member Panel/MyReading.html')
+    else:
+        return render(request, 'Base/notfound.html')
+
+
+@login_required(login_url='Login')
 def Fine(request):
     if request.user.is_staff == True:
         return render(request, 'Library Panel/Library/Fine.html')
@@ -1286,19 +1294,12 @@ def MemberDashbord(request, id):
                 if type == "getdashboard":
                     Member = request.POST.get('Member')
                     try:
-                        member = models.Account.objects.filter(
-                            is_member=True).count()
-                        Staff = models.Account.objects.filter(
-                            is_staff=True).count()
+
                         books = models.Borrow.objects.filter(
                             Member=Member).count()
                         message = []
                         message.append({
-                            'members': member,
-                            'staff': Staff,
                             'books': books,
-                            'total': int(Staff)+int(member),
-
 
                         })
                         return JsonResponse({'isError': False, 'Message': message}, status=200)
@@ -1320,6 +1321,7 @@ def MemberDashbord(request, id):
 
                     except Exception as error:
                         return JsonResponse({'Message': str(error)+". Please contact ICT office", 'isError': True, }, status=200)
+
                 if type == "getCategory":
                     try:
                         Category = models.Category.objects.all()
@@ -1334,6 +1336,28 @@ def MemberDashbord(request, id):
 
                     except Exception as error:
                         return JsonResponse({'Message': str(error)+". Please contact ICT office", 'isError': True, }, status=200)
+
+                if type == "getmyreading":
+                    Member = request.POST.get('Member')
+                    try:
+                        Reading = models.Reading.objects.filter(Member=Member)
+                        message = []
+                        for i in range(0, len(Reading)):
+                            time_outs = str(Reading[i].time_out).split(
+                                ':')[0] + ':' + str(Reading[i].time_out).split(':')[1]
+                            time_ins = str(Reading[i].time_in).split(
+                                ':')[0] + ':' + str(Reading[i].time_in).split(':')[1]
+                            message.append({
+
+                                'time_out': shorttime(time_outs),
+                                'time_in': shorttime(time_ins),
+                                'created_at': PreviewDate(Reading[i].created_at, True),
+                            })
+                        return JsonResponse({'isError': False, 'Message': message}, status=200)
+
+                    except Exception as error:
+                        return JsonResponse({'Message': str(error)+". Please contact ICT office", 'isError': True, }, status=200)
+
     else:
         return render(request, 'base/notfound.html')
 

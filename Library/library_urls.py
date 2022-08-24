@@ -13,6 +13,7 @@ urlpatterns = [
     path('Book', views.Book, name='Book'),
     path('Borrow', views.Borrow, name='Borrow'),
     path('Reading', views.Reading, name='Reading'),
+    path('MyReading', views.MyReading, name='MyReading'),
     path('Fine', views.Fine, name='Fine'),
     path('Print_Book_Borrow', views.Print_Book_Borrow, name='Print_Book_Borrow'),
     path('print_fine', views.print_fine, name='print_fine'),
@@ -33,5 +34,6 @@ urlpatterns = [
     path('manage_fine/<int:id>', views.ManageFine, name='ManageFine'),
     path('manage_reading/<int:id>', views.ManageReading, name='ManageReading'),
     path('manage_dashboard/<int:id>', views.ManageDashboard, name='ManageReading'),
-    path('manage_member_dashbord/<int:id>', views.MemberDashbord, name='MemberDashbord'),
+    path('manage_member_dashbord/<int:id>',
+         views.MemberDashbord, name='MemberDashbord'),
 ]

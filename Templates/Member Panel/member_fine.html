@@ -1,0 +1,65 @@
+{% extends "../Base/index.html" %}
+{% load static %}
+
+
+
+{% block Title %}
+<title>Reading Books</title>
+{% endblock %}
+
+{% block Body %}
+{% include "./nav.html" %}
+<div class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1 class="m-0">Reading</h1>
+      </div><!-- /.col -->
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="#">Library Store</a></li>
+          <li class="breadcrumb-item active">Reading Books</li>
+        </ol>
+      </div><!-- /.col -->
+    </div><!-- /.row -->
+  </div><!-- /.container-fluid -->
+</div>
+<section class="content">
+  <div class="container-fluid">
+    <!-- Small boxes (Stat box) -->
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-body">
+            <form>
+              {% csrf_token %}
+              <input type="text" class="form-control d-none" id="Member" IDs= {{ request.user.id }}></form>
+                <h1 class="mb-3">{{ request.user.first_name }} {{ request.user.last_name }}</h1>
+
+                <table id="datatable" class="table table-bordered dt-responsive  nowrap w-100">
+                    <thead>
+                      <tr>
+                        <th>#No</th>
+                        <th>Book</th>
+                        <th>Amount</th>
+                        <th>Paid</th>
+                       
+                      </tr>
+                    </thead>
+      
+                    <tbody></tbody>
+                  </table>
+          </div>
+        </div>
+        <!-- general form elements -->
+
+      </div>
+    </div>
+
+
+  </div><!-- /.container-fluid -->
+</section>
+
+ {% endblock %} {% block Script %} <script src={% static 'script/member/member_fine.js' %}>
+</script>
+{% endblock %}

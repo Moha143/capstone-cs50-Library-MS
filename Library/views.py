@@ -127,6 +127,14 @@ def MyReading(request):
 
 
 @login_required(login_url='Login')
+def MemberFineList(request):
+    if request.user.is_member == True:
+        return render(request, 'Member Panel/member_fine.html')
+    else:
+        return render(request, 'Base/notfound.html')
+
+
+@login_required(login_url='Login')
 def Fine(request):
     if request.user.is_staff == True:
         return render(request, 'Library Panel/Library/Fine.html')
@@ -1353,6 +1361,25 @@ def MemberDashbord(request, id):
                                 'time_in': shorttime(time_ins),
                                 'created_at': PreviewDate(Reading[i].created_at, True),
                             })
+                        return JsonResponse({'isError': False, 'Message': message}, status=200)
+
+                    except Exception as error:
+                        return JsonResponse({'Message': str(error)+". Please contact ICT office", 'isError': True, }, status=200)
+                if type == "memberfine":
+                    Member = request.POST.get('Member')
+                    try:
+
+                        Fine = models.Fine.objects.filter(Member=Member)
+                        message = []
+                        for i in range(0, len(Fine)):
+                            message.append({
+                                'id': Fine[i].id,
+                                'book': Fine[i].borrow.Book.title,
+                                'amount': "$ " + Fine[i].amount,
+                                'paid': "$ "+Fine[i].paid,
+
+                            })
+
                         return JsonResponse({'isError': False, 'Message': message}, status=200)
 
                     except Exception as error:

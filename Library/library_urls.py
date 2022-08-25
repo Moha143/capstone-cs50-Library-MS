@@ -14,6 +14,7 @@ urlpatterns = [
     path('Borrow', views.Borrow, name='Borrow'),
     path('Reading', views.Reading, name='Reading'),
     path('MyReading', views.MyReading, name='MyReading'),
+    path('MemberFineList', views.MemberFineList, name='MemberFineList'),
     path('Fine', views.Fine, name='Fine'),
     path('Print_Book_Borrow', views.Print_Book_Borrow, name='Print_Book_Borrow'),
     path('print_fine', views.print_fine, name='print_fine'),

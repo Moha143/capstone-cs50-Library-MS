@@ -25,11 +25,16 @@ $(document).ready(function () {
         async: true,
         success: function (response) {
           if (!response.isError) {
-            toastr.success(response.Message);
+       
+            swal(response.Message, {
+              icon: "success",
+            });
             $("#AddAuthor").modal("hide");
             AllAuthor();
           } else {
-            toastr.error(response.Message);
+            swal(response.Message, {
+              icon: "error",
+            });
           }
         },
         error: function (response) {},
@@ -56,11 +61,15 @@ $(document).ready(function () {
         async: true,
         success: function (response) {
           if (!response.isError) {
-            toastr.success(response.Message);
+            swal(response.Message, {
+              icon: "success",
+            });
             $("#UpdateAuthor").modal("hide");
             AllAuthor();
           } else {
-            toastr.error(response.Message);
+            swal(response.Message, {
+              icon: "error",
+            });
           }
         },
         error: function (response) {},

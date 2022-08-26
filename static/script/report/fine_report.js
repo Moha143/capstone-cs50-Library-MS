@@ -86,8 +86,7 @@ $(document).ready(function () {
     
         var dataRow = "";
         if (rows.length > 0) {
-          dataRow = `<option value=''>Select Member</option>`;
-          
+          dataRow = `<option value='All'>All Member</option>`;
           for (var i = 0; i < rows.length; i++) {
             dataRow +=
               `

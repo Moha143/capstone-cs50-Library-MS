@@ -61,47 +61,6 @@
             font-size: 18px;
             color: black
         }
-
-        #title {
-            color: black;
-            font-weight: 400;
-        }
-
-        #title span {
-            font-weight: 300;
-            color: black;
-        }
-
-
-        .profile_picture {
-            width: 64pt;
-            height: 59pt;
-            position: absolute;
-            top: 39.5pt;
-            right: 31.5pt;
-            overflow: hidden;
-        }
-
-        .profile_wrapper {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-        }
-
-        .profile_wrapper img {
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-
-        .image_break {
-            page-break-inside: avoid;
-        }
-
         .container {
             position: relative;
         }
@@ -173,19 +132,18 @@
         let Fine = JSON.parse(sessionStorage.getItem("Fine"));
         let types = sessionStorage.getItem("type");
         let rowData = ""
-        $('#MName').text(Fine.member);
-        $('#Author').text(Fine.author);
-        $('#Book').text(Fine.BookName);
-        $('#NBook').text(Fine.NBook);
-        $('#Category').text(Fine.category);
-        $('#Start').text(Fine.start);
-        $('#End').text(Fine.end);
-        $('#Phone').text(Fine.Phone);
-        $('#Status').text(Fine.Status);
-        $('#paid').text(Fine.paid);
-        $('#amount').text(Fine.amount);
-        
-        print();
+        $('#MName').text(Fine[0].member);
+        $('#Author').text(Fine[0].author);
+        $('#Book').text(Fine[0].BookName);
+        $('#NBook').text(Fine[0].NBook);
+        $('#Category').text(Fine[0].category);
+        $('#Start').text(Fine[0].start);
+        $('#End').text(Fine[0].end);
+        $('#Phone').text(Fine[0].Phone);
+        $('#Status').text(Fine[0].Status);
+        $('#paid').text(Fine[0].paid);
+        $('#amount').text(Fine[0].amount);
+         print(); 
 
         window.onafterprint = function () {
             sessionStorage.removeItem("Fine");

@@ -25,11 +25,15 @@ $(document).ready(function () {
         async: true,
         success: function (response) {
           if (!response.isError) {
-            toastr.success(response.Message);
+            swal(response.Message, {
+              icon: "success",
+            });
             $("#AddCategory").modal("hide");
             AllCategory();
           } else {
-            toastr.error(response.Message);
+            swal(response.Message, {
+              icon: "error",
+            });
           }
         },
         error: function (response) {},
@@ -56,11 +60,15 @@ $(document).ready(function () {
         async: true,
         success: function (response) {
           if (!response.isError) {
-            toastr.success(response.Message);
+            swal(response.Message, {
+              icon: "success",
+            });
             $("#UpdateCategory").modal("hide");
             AllCategory();
           } else {
-            toastr.error(response.Message);
+            swal(response.Message, {
+              icon: "error",
+            });
           }
         },
         error: function (response) {},

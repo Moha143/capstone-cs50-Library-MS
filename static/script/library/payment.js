@@ -48,7 +48,9 @@ $(document).ready(function () {
                 }
               });
             } else {
-              toastr.error(response.Message);
+              swal(response.Message, {
+                icon: "error",
+              });
             }
           },
           error: function (response) {},

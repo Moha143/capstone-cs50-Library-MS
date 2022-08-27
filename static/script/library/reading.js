@@ -47,11 +47,15 @@ $(document).ready(function () {
           async: true,
           success: function (response) {
             if (!response.isError) {
-              toastr.success(response.Message);
+              swal(response.Message, {
+                icon: "success",
+              });
               $("#AddReading").modal("hide");
               Reading();
             } else {
-              toastr.error(response.Message);
+              swal(response.Message, {
+                icon: "error",
+              });
             }
           },
           error: function (response) {},
@@ -93,11 +97,15 @@ $(document).ready(function () {
           async: true,
           success: function (response) {
             if (!response.isError) {
-              toastr.success(response.Message);
+              swal(response.Message, {
+                icon: "success",
+              });
               $("#UpdateReading").modal("hide");
               Reading();
             } else {
-              toastr.error(response.Message);
+              swal(response.Message, {
+                icon: "error",
+              });
             }
           },
           error: function (response) {},

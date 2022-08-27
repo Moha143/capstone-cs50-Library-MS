@@ -1,5 +1,5 @@
 
-from datetime import datetime
+from datetime import date, datetime
 from django.contrib.auth import login, authenticate,  logout
 from django.shortcuts import render, redirect
 from Library import models
@@ -8,6 +8,8 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.db.models.deletion import RestrictedError
 from datetime import datetime
+
+Today = date.today()
 
 
 def Login(request):
@@ -106,6 +108,14 @@ def Book(request):
 def Borrow(request):
     if request.user.is_staff == True:
         return render(request, 'Library Panel/Library/Borrow.html')
+    else:
+        return render(request, 'Base/notfound.html')
+
+
+@login_required(login_url='Login')
+def FineReport(request):
+    if request.user.is_staff == True:
+        return render(request, 'Library Panel/Report/fine_report.html')
     else:
         return render(request, 'Base/notfound.html')
 
@@ -925,59 +935,99 @@ def ManageBookBorrow(request, id):
 
                 try:
                     DeleteBorrow = models.Borrow.objects.get(id=id)
-                    DeleteBorrow.delete()
-                    message = {
-                        'isError': False,
-                        'Message': 'Book Borrow has been successfully deleted'
-                    }
-                    return JsonResponse(message, status=200)
+                    if DeleteBorrow.status == "Borrow":
+
+                        DeleteBorrow.delete()
+                        message = {
+                            'isError': False,
+                            'Message': 'Book Borrow has been successfully deleted'
+                        }
+                        return JsonResponse(message, status=200)
+                    else:
+                        return JsonResponse({'Message':  "Cannot Delete This Row", 'isError': True, }, status=200)
                 except RestrictedError:
                     return JsonResponse({'isError': True, 'Message': 'Cannot delete, becouse it is restricted'}, status=200)
 
             # Update Book Borrow
             if request.method == 'POST':
+                if type == "change":
+                    Book = request.POST.get('Book')
+                    Start = request.POST.get('Start')
+                    End = request.POST.get('End')
+                    Member = request.POST.get('Member')
+                    NBook = int(request.POST.get('NBook'))
+                    try:
+                        MemberID = models.Account.objects.get(id=Member)
+                        Bookss = models.Book.objects.get(id=Book)
+                        gitBookBorrow = models.Borrow.objects.get(id=id)
 
-                Book = request.POST.get('Book')
-                Start = request.POST.get('Start')
-                End = request.POST.get('End')
-                Member = request.POST.get('Member')
-                NBook = int(request.POST.get('NBook'))
-                try:
-                    MemberID = models.Account.objects.get(id=Member)
-                    Bookss = models.Book.objects.get(id=Book)
-                    gitBookBorrow = models.Borrow.objects.get(id=id)
-                    if NBook <= int(Bookss.available):
-                        gitBookBorrow.Member = MemberID
-                        gitBookBorrow.Book = Bookss
-                        gitBookBorrow.start_date = Start
-                        gitBookBorrow.end_date = End
-                        if NBook == int(gitBookBorrow.NBook):
-                            available = int(Bookss.available)
-                            av = available
-                        elif NBook > int(gitBookBorrow.NBook):
-                            available = NBook - int(gitBookBorrow.NBook)
-                            av = int(Bookss.available)-available
-
+                        if gitBookBorrow.status == "Not Returned" and gitBookBorrow.is_fine == True:
+                            return JsonResponse({'Message': "Caanot Edit. " + gitBookBorrow.Member.first_name + " " + gitBookBorrow.Member.last_name + " must pay fine punishment", 'isError': True, }, status=200)
+                        elif gitBookBorrow.status == "Returned":
+                            return JsonResponse({'Message': gitBookBorrow.Member.first_name + " " + gitBookBorrow.Member.last_name + " Already returned this Book", 'isError': True, }, status=200)
                         else:
-                            available = int(gitBookBorrow.NBook) - NBook
-                            av = available+int(Bookss.available)
+                            if NBook <= int(Bookss.available):
+                                gitBookBorrow.Member = MemberID
+                                gitBookBorrow.Book = Bookss
+                                gitBookBorrow.start_date = Start
+                                gitBookBorrow.end_date = End
+                                if NBook == int(gitBookBorrow.NBook):
+                                    available = int(Bookss.available)
+                                    av = available
+                                elif NBook > int(gitBookBorrow.NBook):
+                                    available = NBook - \
+                                        int(gitBookBorrow.NBook)
+                                    av = int(Bookss.available)-available
 
-                        Bookss.available = av
-                        gitBookBorrow.NBook = NBook
-                        Bookss.save()
-                        gitBookBorrow.save()
+                                else:
+                                    available = int(
+                                        gitBookBorrow.NBook) - NBook
+                                    av = available+int(Bookss.available)
 
-                        message = {
-                            'isError': False,
-                            'Message': ' Book Borrow has been updated successfuly'
-                        }
+                                Bookss.available = av
+                                gitBookBorrow.NBook = NBook
+                                Bookss.save()
+                                gitBookBorrow.save()
 
-                        return JsonResponse(message, status=200)
+                                message = {
+                                    'isError': False,
+                                    'Message': ' Book Borrow has been updated successfuly'
+                                }
 
-                    else:
-                        return JsonResponse({'Message': ". This number is not available", 'isError': True, }, status=200)
-                except Exception as error:
-                    return JsonResponse({'Message': str(error)+". Please contact ICT office", 'isError': True, }, status=200)
+                                return JsonResponse(message, status=200)
+
+                            else:
+                                return JsonResponse({'Message': ". This number is not available", 'isError': True, }, status=200)
+                    except Exception as error:
+                        return JsonResponse({'Message': str(error)+". Please contact ICT office", 'isError': True, }, status=200)
+                if type == "status":
+                    try:
+
+                        getBookBorrow = models.Borrow.objects.get(id=id)
+
+                        getBooks = models.Book.objects.get(
+                            id=getBookBorrow.Book.id)
+                        if getBookBorrow.status == "Returned":
+                            return JsonResponse({'Message': "This Book already return", 'isError': True, }, status=200)
+                        elif getBookBorrow.status == "Not Returned" and getBookBorrow.is_fine == True:
+                            return JsonResponse({'Message': getBookBorrow.Member.first_name + " " + getBookBorrow.Member.last_name + " must pay fine punishment", 'isError': True, }, status=200)
+                        else:
+                            NBooks = int(getBookBorrow.NBook)
+                            availableBooks = int(getBooks.available)
+                            getBooks.available = availableBooks+NBooks
+                            getBookBorrow.status = "Returned"
+                            getBooks.save()
+                            getBookBorrow.save()
+
+                            message = {
+                                'isError': False,
+                                'Message': ' Book Borrow has been updated successfuly'
+                            }
+
+                            return JsonResponse(message, status=200)
+
+                    except Exception as error:
+                        return JsonResponse({'Message': str(error)+". Please contact ICT office", 'isError': True, }, status=200)
     else:
         return render(request, 'base/notfound.html')
 
@@ -1136,26 +1186,64 @@ def ManageFine(request, id):
                     return JsonResponse({'Message': str(error)+". Please contact ICT office", 'isError': True, }, status=200)
             if type == "finedetails":
                 Member = request.POST.get('Member')
-                borrow = request.POST.get('borrow')
                 try:
-                    Borrowdetail = models.Fine.objects.filter(
-                        borrow=borrow)
+                    if Member == "All":
+                        FineReport = models.Fine.objects.all()
+                    else:
+                        FineReport = models.Fine.objects.filter(
+                            Member=Member)
+
                     message = []
-                    for i in range(0, len(Borrowdetail)):
+                    msg = []
+                    totalamount = 0
+                    totalpaid = 0
+                    for i in range(0, len(FineReport)):
+                        totalamount = totalamount+float(FineReport[i].amount)
+                        totalpaid = totalpaid+float(FineReport[i].paid)
                         message.append({
-                            'id': Borrowdetail[i].id,
-                            'start': PreviewDate(str(Borrowdetail[i].borrow.start_date), False),
-                            'end':  PreviewDate(str(Borrowdetail[i].borrow.end_date), False),
-                            'amount': Borrowdetail[i].amount,
-                            'paid': Borrowdetail[i].paid,
-                            'remaining': float(Borrowdetail[i].amount) - float(Borrowdetail[i].paid),
+                            'id': FineReport[i].id,
+
+                            'start': PreviewDate(str(FineReport[i].borrow.start_date), False),
+                            'end':  PreviewDate(str(FineReport[i].borrow.end_date), False),
+                            'book': FineReport[i].borrow.Book.title,
+                            'amount': FineReport[i].amount,
+                            'paid': FineReport[i].paid,
+                            'remaining': float(FineReport[i].amount) - float(FineReport[i].paid),
                         })
-                    return JsonResponse({'isError': False, 'Message': message}, status=200)
+                    msg.append({
+
+                        'totalamount': totalamount,
+                        'totalpaid': totalpaid,
+                    })
+                    return JsonResponse({'isError': False, 'Message': message, "summary": msg}, status=200)
 
                 except Exception as error:
                     return JsonResponse({'Message': str(error)+". Please contact ICT office", 'isError': True, }, status=200)
 
         else:
+            if request.method == "GET":
+                try:
+                    Fine = models.Fine.objects.get(id=id)
+                    message = []
+                    message.append({
+                        'id': Fine.id,
+                        'member': Fine.Member.first_name + ' ' + Fine.Member.first_name,
+                        'Phone': Fine.borrow.Member.phone,
+                        'BookName': Fine.borrow.Book.title,
+                        'NBook': Fine.borrow.NBook,
+                        'Status': Fine.borrow.status,
+                        'author': Fine.borrow.Book.author.name,
+                        'category': Fine.borrow.Book.category.name,
+                        'amount': "$ " + Fine.amount,
+                        'paid': "$ "+Fine.paid,
+                        'start': PreviewDate(str(Fine.borrow.start_date), False),
+                        'end':  PreviewDate(str(Fine.borrow.end_date), False),
+                        'remaining': float(Fine.amount) - float(Fine.paid),
+
+                    })
+                    return JsonResponse({'isError': False, 'Message': message}, status=200)
+                except Exception as error:
+                    return JsonResponse({'Message': str(error)+". Please contact ICT office", 'isError': True, }, status=200)
 
             # Delete Fine
             if request.method == 'DELETE':

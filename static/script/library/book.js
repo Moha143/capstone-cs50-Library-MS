@@ -80,11 +80,15 @@ $(document).ready(function () {
           async: true,
           success: function (response) {
             if (!response.isError) {
-              toastr.success(response.Message);
+              swal(response.Message, {
+                icon: "success",
+              });
               $("#AddBook").modal("hide");
               AllBooks();
             } else {
-              toastr.error(response.Message);
+              swal(response.Message, {
+                icon: "error",
+              });
             }
           },
           error: function (response) {},
@@ -227,11 +231,15 @@ $(document).ready(function () {
           async: true,
           success: function (response) {
             if (!response.isError) {
-              toastr.success(response.Message);
+              swal(response.Message, {
+                icon: "success",
+              });
               $("#UpdateBook").modal("hide");
               AllBooks();
             } else {
-              toastr.error(response.Message);
+              swal(response.Message, {
+                icon: "error",
+              });
             }
           },
           error: function (response) {},

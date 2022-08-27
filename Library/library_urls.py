@@ -20,6 +20,7 @@ urlpatterns = [
     path('print_fine', views.print_fine, name='print_fine'),
     path('Profile', views.Profile, name='Profile'),
     path('Add_payment', views.Add_payment, name='Add_payment'),
+    path('FineReport', views.FineReport, name='FineReport'),
     path('BookDetail/<str:id>', views.BookDetail, name='BookDetail'),
 
 

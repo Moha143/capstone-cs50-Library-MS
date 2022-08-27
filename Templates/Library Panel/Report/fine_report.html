@@ -1,24 +1,24 @@
-{% extends "../Base/index.html" %}
+{% extends "../../Base/index.html" %}
 {% load static %}
 
 
 
 {% block Title %}
-<title>Reading Books</title>
+<title>Fine Report</title>
 {% endblock %}
 
 {% block Body %}
-{% include "./nav.html" %}
+{% include "./../library_nav.html" %}
 <div class="content-header">
   <div class="container-fluid">
     <div class="row mb-2">
       <div class="col-sm-6">
-        <h1 class="m-0">Fine</h1>
+        <h1 class="m-0">Fine Report</h1>
       </div><!-- /.col -->
       <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
-          <li class="breadcrumb-item"><a href="#">Library Store</a></li>
-          <li class="breadcrumb-item active">Fine Books</li>
+          <li class="breadcrumb-item"><a href="#">Report</a></li>
+          <li class="breadcrumb-item active">Fine Report</li>
         </ol>
       </div><!-- /.col -->
     </div><!-- /.row -->
@@ -32,11 +32,17 @@
         <div class="card">
           <div class="card-body">
             <form>
-              {% csrf_token %}
-              <input type="text" class="form-control d-none" id="Member" IDs= {{ request.user.id }}></form>
-                <h1 class="mb-3">{{ request.user.first_name }} {{ request.user.last_name }}</h1>
-
-                <table id="datatable" class="table table-bordered dt-responsive  nowrap w-100">
+              {% csrf_token %}</form>
+            <div class="col-md-5">
+                <div class="form-group">
+                  <label> Select Member</label>
+                  <select class="form-control" id="Member">
+                
+                  </select>
+                </div>
+              </div>
+            </div>
+            <table id="datatable" class="table table-bordered dt-responsive  nowrap w-100">
                     <thead>
                       <tr>
                         <th>#No</th>
@@ -60,6 +66,8 @@
   </div><!-- /.container-fluid -->
 </section>
 
- {% endblock %} {% block Script %} <script src={% static 'script/member/member_fine.js' %}>
-</script>
+{% endblock %}
+
+{% block Script %}
+<script src={% static 'script/report/fine_report.js' %}></script>
 {% endblock %}

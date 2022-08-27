@@ -57,11 +57,15 @@ $(document).ready(function () {
           async: true,
           success: function (response) {
             if (!response.isError) {
-              toastr.success(response.Message);
+              swal(response.Message, {
+                icon: "success",
+              });
               $("#AddBorrow").modal("hide");
               AllBookBorrow();
             } else {
-              toastr.error(response.Message);
+              swal(response.Message, {
+                icon: "error",
+              });
             }
           },
           error: function (response) {},
@@ -100,6 +104,7 @@ $(document).ready(function () {
       formData.append("Member", Member);
       formData.append("Book", Book);
       formData.append("NBook", NBook);
+      formData.append("type", "change");
       if (Start > End) {
         toastr.error("error Start Date  must less dhan End Date");
       } else {
@@ -113,11 +118,16 @@ $(document).ready(function () {
           async: true,
           success: function (response) {
             if (!response.isError) {
-              toastr.success(response.Message);
+              swal(response.Message, {
+                icon: "success",
+              });
               $("#UpdateBorrow").modal("hide");
               AllBookBorrow();
             } else {
-              toastr.error(response.Message);
+           
+              swal(response.Message, {
+                icon: "error",
+              });
             }
           },
           error: function (response) {},
@@ -126,6 +136,45 @@ $(document).ready(function () {
     }
   });
 
+  $("#datatable tbody").on("click", ".Return", function () {
+    const ID = $(this).attr("ID");
+    let formData = new FormData();
+    formData.append("type", "status");
+    swal({
+      title: "Are you sure?",
+      text: "yes, I confirmed",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    }).then((willDelete) => {
+
+      if (willDelete) {
+        $.ajax({
+          method: "POST",
+          url: URLS + "Library/manage_bookborrow/" + ID,
+          headers: { "X-CSRFToken": csrftoken },
+          processData: false,
+          contentType: false,
+          data: formData,
+          async: true,
+          success: function (response) {
+            if (!response.isError) {
+              swal(response.Message, {
+                icon: "success",
+              });
+              AllBookBorrow();
+            } else {
+              swal(response.Message, {
+                icon: "error",
+              });
+            }
+          },
+          error: function (response) {},
+        });
+      } else {
+      }
+    });
+  });
   $("#datatable tbody").on("click", ".Delete", function () {
     const ID = $(this).attr("ID");
     swal({
@@ -267,6 +316,7 @@ $(document).ready(function () {
           `<td>${dataRows[i][9]}</td>`,
           `
           <button type="button" class="btn btn-info Edit" ID='${dataRows[i][0]}'> <i class="far fa-edit"></i></button>
+          <button type="button" class="btn btn-success Return" ID='${dataRows[i][0]}'> Return</button>
           <button type="button" class="btn btn-danger Delete" ID='${dataRows[i][0]}'> <i class="fa fa-trash"></i></button>
           <button type="button" class="btn btn-primary Show" ID='${dataRows[i][0]}'> <i class="fa fa-print"></i></button>
 

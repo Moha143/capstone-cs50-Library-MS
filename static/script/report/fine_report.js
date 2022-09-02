@@ -1,4 +1,5 @@
 $(document).ready(function () {
+
     Member()
     const ID = $("#Member").val();
     if (ID == "" || ID == 0 || ID == null || ID == undefined) {
@@ -103,5 +104,5 @@ $(document).ready(function () {
         } else {
         }
       }
-  });
-  
+
+});

@@ -22,6 +22,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('Library/', include('Library.library_urls')),
     path('', views.Login, name='Login'),
+    path('logout', views.Logout, name='Logout'),
 ]
 if settings.DEBUG:
     urlpatterns += static(

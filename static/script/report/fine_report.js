@@ -1,4 +1,5 @@
 $(document).ready(function () {
+    Member()
     const ID = $("#Member").val();
     if (ID == "" || ID == 0 || ID == null || ID == undefined) {
        
@@ -6,7 +7,7 @@ $(document).ready(function () {
     else {
         AllFine() 
     }
-    Member()
+   
     
     $("#Member").on("change", function () {
        const IDs= $(this).val()
@@ -86,7 +87,7 @@ $(document).ready(function () {
     
         var dataRow = "";
         if (rows.length > 0) {
-          dataRow = `<option value='All'>All Member</option>`;
+          dataRow = `<option value="All">All Member</option>`;
           for (var i = 0; i < rows.length; i++) {
             dataRow +=
               `

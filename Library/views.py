@@ -32,7 +32,10 @@ def Login(request):
         return render(request, 'Library Panel/Account/login.html')
     else:
         return redirect('Dashboard')
-
+@login_required(login_url='Login')
+def Logout(request):
+    logout(request)
+    return redirect('Login')
 
 @login_required(login_url='Login')
 def Main(request):

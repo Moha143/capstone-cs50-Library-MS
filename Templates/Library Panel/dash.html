@@ -6,7 +6,7 @@
 {% block Title %}
 <title>Dashboard</title>
 <!-- Ekko Lightbox -->
-<link rel="stylesheet" href={% static "plugins/ekko-lightbox/ekko-lightbox.css" %}>
+<link rel="stylesheet" href={% static "bootstrap/css/ekko-lightbox.css" %}>
 {% endblock %}
 
 {% block Body %}
@@ -125,7 +125,7 @@
 
 </script>
 <!-- Ekko Lightbox -->
-<script src={% static "plugins/ekko-lightbox/ekko-lightbox.min.js" %}></script>
+<script src={% static "bootstrap/js/ekko-lightbox.min.js" %}></script>
 <script>
   $(function () {
     $(document).on('click', '[data-toggle="lightbox"]', function (event) {

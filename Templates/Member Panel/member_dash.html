@@ -6,62 +6,15 @@
 {% block Title %}
 <title>Dashboard</title>
 <!-- Ekko Lightbox -->
-<link rel="stylesheet" href={% static "plugins/ekko-lightbox/ekko-lightbox.css" %}>
+<link rel="stylesheet" href={% static "bootstrap/css/ekko-lightbox.css" %}>
 {% endblock %}
 
 {% block Body %}
 {% include "./nav.html" %}
 <section class="content">
   <div class="container-fluid">
-    <!-- Small boxes (Stat box) -->
-    <div class="row mt-3">
 
-      <div class="col-md-4">
-        <!-- small box -->
-        <div class="small-box bg-warning">
-          <div class="inner">
-            <h3 id="members"></h3>
 
-            <p>Total Members</p>
-          </div>
-          <div class="icon">
-            <i class="ion ion-person-add"></i>
-          </div>
-          <a href="{% url 'member_list' %}" class="small-box-footer">More info <i
-              class="fas fa-arrow-circle-right"></i></a>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <!-- small box -->
-        <div class="small-box bg-info">
-          <div class="inner">
-            <h3 id="staffs"></h3>
-
-            <p>Total Staff</p>
-          </div>
-          <div class="icon">
-            <i class="ion ion-person-add"></i>
-          </div>
-          <a href="{% url 'staff_list' %}" class="small-box-footer">More info <i
-              class="fas fa-arrow-circle-right"></i></a>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <!-- small box -->
-        <div class="small-box bg-success">
-          <div class="inner">
-            <h3 id="books"></h3>
-            <p>Total Book</p>
-          </div>
-          <div class="icon">
-            <i class="fa fa-book"></i>
-          </div>
-          <a href="{% url 'Book' %}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-        </div>
-      </div>
-
-      <!-- ./col -->
-    </div>
     <div class="row">
       <div class="col-md-12">
         <div class="card">
@@ -113,10 +66,7 @@
         </div>
       </div>
     </div>
-    <!-- /.row -->
-    <!-- Main row -->
-
-    <!-- /.row (main row) -->
+   
   </div><!-- /.container-fluid -->
 </section>
 {% endblock %}
@@ -126,7 +76,7 @@
 
 </script>
 <!-- Ekko Lightbox -->
-<script src={% static "plugins/ekko-lightbox/ekko-lightbox.min.js" %}></script>
+<script src={% static "bootstrap/js/ekko-lightbox.min.js" %}></script>
 <script>
   $(function () {
     $(document).on('click', '[data-toggle="lightbox"]', function (event) {

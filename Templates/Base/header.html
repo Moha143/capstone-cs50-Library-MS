@@ -21,7 +21,7 @@
     <!-- Messages Dropdown Menu -->
     <li class="nav-item dropdown">
       <a class="nav-link" data-toggle="dropdown" href="#">
-        <i class="far fa-comments"></i>
+        <i class="fas fa-user"></i>
         <span class="txt-black">Profile</span>
       </a>
       <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
@@ -43,28 +43,15 @@
         </a>
       </div>
     </li>
-    <!-- Notifications Dropdown Menu -->
-    <li class="nav-item dropdown">
-      <a class="nav-link" data-toggle="dropdown" href={% url 'Logout' %}>
-        <i class="far fa-bell"></i>
-        <span class="badge badge-warning navbar-badge">Logout</span>
-      </a>
-     
-    </li>
+    
     <li class="nav-item">
       <a class="nav-link" data-widget="fullscreen" href="#" role="button">
         <i class="fas fa-expand-arrows-alt"></i>
       </a>
     </li>
     <li class="nav-item">
-      <a
-        class="nav-link"
-        data-widget="control-sidebar"
-        data-controlsidebar-slide="true"
-        href="#"
-        role="button"
-      >
-        <i class="fas fa-th-large"></i>
+      <a class="nav-link"  href={% url 'Logout' %}>
+        <i class="fas fa-th-large"> logout</i>
       </a>
     </li>
   </ul>

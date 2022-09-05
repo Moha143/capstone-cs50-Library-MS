@@ -5,15 +5,27 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Login</title>
+  <link rel="stylesheet" href= {% static "bootstrap/css/tempusdominus-bootstrap-4.min.css"%}>
+  <!-- iCheck -->
+  <link rel="stylesheet" href= {% static "bootstrap/css/icheck-bootstrap.min.css"%}>
+  <!-- JQVMap -->
+  <link rel="stylesheet" href= {% static "bootstrap/css/jqvmap.min.css"%}>
+  <!-- Theme style -->
+  <link rel="stylesheet" href= {% static "bootstrap/css/adminlte.min.css"%}>
+  <!-- overlayScrollbars -->
+  <link rel="stylesheet" href= {% static "bootstrap/css/OverlayScrollbars.min.css"%}>
+  <!-- Daterange picker -->
+  <link rel="stylesheet" href= {% static "bootstrap/css/daterangepicker.css"%}>
+  <!-- summernote -->
+  <link rel="stylesheet" href= {% static "bootstrap/css/summernote-bs4.min.css"%}>
+  <!-- Toastr -->
+  <link rel="stylesheet" href={% static "bootstrap/css/toastr.min.css"%}>
 
   <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome -->
-  <link rel="stylesheet" href={% static "plugins/fontawesome-free/css/all.min.css"%}>
-  <!-- icheck bootstrap -->
-  <link rel="stylesheet" href={% static "plugins/icheck-bootstrap/icheck-bootstrap.min.css"%}>
-  <!-- Theme style -->
-  <link rel="stylesheet" href={% static "dist/css/adminlte.min.css"%}>
+  <link rel="stylesheet" href= {% static "bootstrap/css/fontawesome/css/all.min.css"%}>
 </head>
 <body class="hold-transition login-page">
 <div class="login-box">
@@ -64,11 +76,18 @@
 <!-- /.login-box -->
 
 <!-- jQuery -->
-<script src={% static "plugins/jquery/jquery.min.js"%}></script>
+<script src={% static "plugins/jquery/jquery.min.js" %}></script>
+
+<!-- jQuery UI 1.11.4 -->
+<script src={% static "plugins/jquery-ui/jquery-ui.min.js" %}></script>
+<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+<script>
+    $.widget.bridge("uibutton", $.ui.button);
+</script>
+{% block Script %}{% endblock %}
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <!-- Bootstrap 4 -->
-<script src={% static "plugins/bootstrap/js/bootstrap.bundle.min.js"%}></script>
-<!-- AdminLTE App -->
-<script src={% static "dist/js/adminlte.min.js"%}></script>
+<script src={% static "bootstrap/js/bootstrap.bundle.min.js" %}></script>
 <script>
   const URL = 'http://127.0.0.1:8000/';
   const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;

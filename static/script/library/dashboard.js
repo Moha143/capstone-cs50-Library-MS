@@ -116,7 +116,7 @@ $(document).ready(function () {
           dataRow += `
           <div class="filtr-item col-ms-2" >
           <a href="/media/${rows[i].image}" data-toggle="lightbox"
-            data-title=${rows[i].title}>
+            data-title='${rows[i].title}'>
             <img src="/media/${rows[i].image}" class="img-fluid mb-2"
               alt="white sample" />
           </a>

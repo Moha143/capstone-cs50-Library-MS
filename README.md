@@ -116,9 +116,6 @@ There are 7 models for the web application's database.
 - `requirements.txt` - list of Python packages that need to be installed
 
 ### How to run the application.
-
-There are 7 models for the web application's database.
-pip install -r requirements.txt
 1. Ensure that you have all of the necessary Python packages (see requirements.txt) 
     ```
     pip install -r requirements.txt

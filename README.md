@@ -89,7 +89,7 @@ There are 7 models for the web application's database.
 6. `Fine` - Holds fine of member book borrow.
 7. `Reading` - Holds the information member readin in the library.
 
-## Back End FILES:
+## Back End Files:
 
 - `apschedule` - Holds all time files.
   - `apschedule\functions.py` defines two functions that allow to perform spefic task.

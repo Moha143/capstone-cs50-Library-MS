@@ -128,7 +128,7 @@ pip install -r requirements.txt
    ```
    py manage.py runserver
    ```
-   with access port of  8000
+  
  
 3. Run "python manage.py runserver" in the terminal
 

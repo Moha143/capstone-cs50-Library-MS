@@ -124,13 +124,11 @@ pip install -r requirements.txt
     pip install -r requirements.txt
     ```
 2. Navigate to the location of manage.py
-    Run access port of  8000
-   ```
+    
+3. Run "python manage.py runserver" in the terminal with port of 8000
+ ```
    py manage.py runserver
    ```
-  
- 
-3. Run "python manage.py runserver" in the terminal
 
 </br>
 

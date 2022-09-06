@@ -136,7 +136,7 @@ pip install -r requirements.txt
 <h2>Staff Dashboard</h2>
 <img src="static/snaps/staff_dashboard.PNG">
 <h2>Book Lists</h2>
-<img src="static/sanps/books.PNG">
+<img src="static/snaps/book.PNG">
 <h2>Book borrow</h2>
 <img src="static/snaps/bookborrow.PNG">
 <h2>Fine Report</h2>

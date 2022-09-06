@@ -96,12 +96,12 @@ There are 7 models for the web application's database.
   - `apschedule\timer.py` Here i configured APScheduler to queue background jobs.
     The directive will schedule an interval job every 5 second, starting at the time the clock process is launched.
 - `Library` - Holds apps files.
-- `Library\__init__.py` makes LMS appear as a package to Python _[empty]_
-- `Library\admin.py` manages superusers _[empty]_
-- `Library\apps.py` configuration file
-- `Library\models.py` contains classes that represent tables in our database
-- `Library\urls.py` defines the mapping between URLs and views
-- `Library\views.py` returns a web response for every url path (login,index and etc )
+  - `Library\__init__.py` makes LMS appear as a package to Python _[empty]_
+  - `Library\admin.py` manages superusers _[empty]_
+  - `Library\apps.py` configuration file
+  - `Library\models.py` contains classes that represent tables in our database
+  - `Library\urls.py` defines the mapping between URLs and views
+  - `Library\views.py` returns a web response for every url path (login,index and etc )
 
 - `LMS` - Holds directory.
   - `LMS\__init__.py` makes Python treat “finalproject” as packages _[empty]_

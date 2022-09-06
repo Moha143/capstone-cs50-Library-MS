@@ -132,4 +132,18 @@ pip install -r requirements.txt
 
 </br>
 
-# Mohamed Omar Hassan
+# SYSTEM IMAGES
+<h2>Staff Dashboard</h2>
+<img src="static/snaps/staff_dashboard.PNG">
+<h2>Book Lists</h2>
+<img src="static/sanps/books.PNG">
+<h2>Book borrow</h2>
+<img src="static/snaps/bookborrow.PNG">
+<h2>Fine Report</h2>
+<img src="static/snaps/fine_report.PNG">
+<h2>Reading Lists</h2>
+<img src="static/snaps/reading_list.PNG">
+<h2>Member Dashboard</h2>
+<img src="static/snaps/member_panel.PNG">
+<h2>Member's Reading lists</h2>
+<img src="static/snaps/myreading.PNG">

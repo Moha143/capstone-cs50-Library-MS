@@ -4,6 +4,11 @@
 
 A library management system is software that is designed to manage all the functions of a library. It helps librarian to maintain the database of new books and the books that are borrowed by members along with their due dates. It tracks the records of the number of books in the library, how many books are available, or how many books have been returned or late fine charges, etc.
 
+# Distinctiveness and Complexity
+
+The Project is designed to be used by two different types of user: librians staff and members(librians staff manages all data while member can only view book that h/she borrowed, reading and payment fine repot if is exist). Its complexity relies on the many models and relationships between them (compared to the rest of the course's projects).This project was built using Django as a backend framework and HTML, CSS , Bootstrap and JavaScript as frontend programming tools. All generated details are saved in a database, which is SQLite by default.
+I believe my project satisfies the distinctiveness and complexity requirements proposed because the idea is somewhat different from previous projects of this course.It uses Django with several models as well as JS to manage things like the navigation bar both staff and member, creating and managing the book borrowing and fine payments, etc. It is also mobile-responsive..
+
 # Structure
 
 The web platform is structured as follows
@@ -42,7 +47,8 @@ The web platform is structured as follows
       - `static\bootstrap\script\reading.js` - javascript files that allows to register members that wants to read the book in the library.
     - `static\bootstrap\script\report` - contains one file for report fine.
       - `static\bootstrap\script\author.js` - javascript files that allows to members fine report such as the members that pay fee and
-        those doest pay fine.
+        those does not pay fine.
+  - `static\bootstrap\snaps` - screenshot of the system
 
 - `Templates` - Holds all template files.
   - `Templates\Base` - Holds all basic layout.
@@ -87,7 +93,7 @@ There are 7 models for the web application's database.
 4. `Book` - Holds the information of book.
 5. `Borrow` - Holds the informations of book borrow details.
 6. `Fine` - Holds fine of member book borrow.
-7. `Reading` - Holds the information member readin in the library.
+7. `Reading` - Holds the information member reading in the library.
 
 ## Back End Files:
 
@@ -96,6 +102,7 @@ There are 7 models for the web application's database.
   - `apschedule\timer.py` Here i configured APScheduler to queue background jobs.
     The directive will schedule an interval job every 5 second, starting at the time the clock process is launched.
 - `Library` - Holds apps files.
+
   - `Library\__init__.py` makes LMS appear as a package to Python _[empty]_
   - `Library\admin.py` manages superusers _[empty]_
   - `Library\apps.py` configuration file
@@ -116,20 +123,34 @@ There are 7 models for the web application's database.
 - `requirements.txt` - list of Python packages that need to be installed
 
 ### How to run the application.
-1. Ensure that you have all of the necessary Python packages (see requirements.txt) 
-    ```
-    pip install -r requirements.txt
-    ```
-2. Navigate to the location of manage.py
-    
-3. Run "python manage.py runserver" in the terminal with port of 8000
- ```
-   py manage.py runserver
+
+1. Ensure that you have all of the necessary Python packages (see requirements.txt)
    ```
+   pip install -r requirements.txt
+   ```
+2. Navigate to the location of manage.py
+3. Run "python manage.py runserver" in the terminal with port of 8000
+
+```
+  py manage.py runserver
+```
+
+4. login
+
+```
+as usper user login :
+email:mo@gmail.com
+pass: 123
+
+as member
+ email:abdikani@gmail.com
+ pass: 123
+```
 
 </br>
 
 # SYSTEM IMAGES
+
 <h2>Staff Dashboard</h2>
 <img src="static/snaps/staff_dashboard.PNG">
 <h2>Book Lists</h2>
@@ -144,3 +165,5 @@ There are 7 models for the web application's database.
 <img src="static/snaps/member_panel.PNG">
 <h2>Member's Reading lists</h2>
 <img src="static/snaps/myreading.PNG">
+
+I hope you find this web application to be helpful. Thank you to the full CS50 team for creating this course, it has been full of learning and discovery!.

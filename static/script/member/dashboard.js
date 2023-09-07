@@ -14,7 +14,7 @@ $(document).ready(function () {
     formData.append("type", "getAuthor");
     $.ajax({
       method: "POST",
-      url: URLS + "Library/manage_member_dashbord/" + 0,
+      url: "/Library/manage_member_dashbord/" + 0,
       processData: false,
       contentType: false,
       data: formData,
@@ -56,7 +56,7 @@ $(document).ready(function () {
     formData.append("type", "getCategory");
     $.ajax({
       method: "POST",
-      url: URLS + "Library/manage_member_dashbord/" + 0,
+      url: "/Library/manage_member_dashbord/" + 0,
       processData: false,
       contentType: false,
       data: formData,
@@ -96,7 +96,7 @@ $(document).ready(function () {
 
     $.ajax({
       method: "POST",
-      url: URLS + "Library/manage_member_dashbord/" + 0,
+      url: "/Library/manage_member_dashbord/" + 0,
       processData: false,
       contentType: false,
       data: formData,
@@ -138,7 +138,7 @@ $(document).ready(function () {
     formData.append("Member", id);
     $.ajax({
       method: "POST",
-      url: URLS + "Library/manage_member_dashbord/" + 0,
+      url: "/Library/manage_member_dashbord/" + 0,
       processData: false,
       contentType: false,
       data: formData,

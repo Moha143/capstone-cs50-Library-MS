@@ -49,7 +49,7 @@ $(document).ready(function () {
       } else {
         $.ajax({
           method: "POST",
-          url: URLS + "Library/manage_bookborrow/" + 0,
+          url: "/Library/manage_bookborrow/" + 0,
           headers: { "X-CSRFToken": csrftoken },
           processData: false,
           contentType: false,
@@ -110,7 +110,7 @@ $(document).ready(function () {
       } else {
         $.ajax({
           method: "POST",
-          url: URLS + "Library/manage_bookborrow/" + ID,
+          url: "/Library/manage_bookborrow/" + ID,
           headers: { "X-CSRFToken": csrftoken },
           processData: false,
           contentType: false,
@@ -124,7 +124,6 @@ $(document).ready(function () {
               $("#UpdateBorrow").modal("hide");
               AllBookBorrow();
             } else {
-           
               swal(response.Message, {
                 icon: "error",
               });
@@ -147,11 +146,10 @@ $(document).ready(function () {
       buttons: true,
       dangerMode: true,
     }).then((willDelete) => {
-
       if (willDelete) {
         $.ajax({
           method: "POST",
-          url: URLS + "Library/manage_bookborrow/" + ID,
+          url: "/Library/manage_bookborrow/" + ID,
           headers: { "X-CSRFToken": csrftoken },
           processData: false,
           contentType: false,
@@ -188,7 +186,7 @@ $(document).ready(function () {
         $.ajax({
           async: true,
           method: "DELETE",
-          url: URLS + "Library/manage_bookborrow/" + ID,
+          url: "/Library/manage_bookborrow/" + ID,
           headers: { "X-CSRFToken": csrftoken },
           async: false,
           success: function (response) {
@@ -215,7 +213,7 @@ $(document).ready(function () {
     $.ajax({
       async: false,
       method: "GET",
-      url: URLS + "Library/manage_bookborrow/" + ID,
+      url: "/Library/manage_bookborrow/" + ID,
       headers: { "X-CSRFToken": csrftoken },
       async: false,
       success: function (response) {
@@ -243,13 +241,13 @@ $(document).ready(function () {
       $.ajax({
         async: false,
         method: "GET",
-        url: URLS + "Library/manage_bookborrow/" + ID,
+        url: "/Library/manage_bookborrow/" + ID,
         headers: { "X-CSRFToken": csrftoken },
         async: false,
         success: function (response) {
           if (!response.isError) {
             sessionStorage.setItem("Borrow", JSON.stringify(response.Message));
-            window.location.replace(URLS + "Library/Print_Book_Borrow");
+            window.location.replace("/Library/Print_Book_Borrow");
           } else {
             swal(response.Message, {
               icon: "error",
@@ -266,7 +264,7 @@ $(document).ready(function () {
     formData.append("type", "get");
     $.ajax({
       method: "POST",
-      url: URLS + "Library/manage_bookborrow/" + 0,
+      url: "/Library/manage_bookborrow/" + 0,
       headers: { "X-CSRFToken": csrftoken },
       processData: false,
       contentType: false,
@@ -331,7 +329,7 @@ $(document).ready(function () {
     formData.append("type", "getmember");
     $.ajax({
       method: "POST",
-      url: URLS + "Library/manage_member/" + 0,
+      url: "/Library/manage_member/" + 0,
       processData: false,
       contentType: false,
       data: formData,
@@ -367,7 +365,7 @@ $(document).ready(function () {
     formData.append("type", "get");
     $.ajax({
       method: "POST",
-      url: URLS + "Library/manage_book/" + 0,
+      url: "/Library/manage_book/" + 0,
       processData: false,
       contentType: false,
       data: formData,

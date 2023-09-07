@@ -39,7 +39,7 @@ $(document).ready(function () {
       formData.append("Avatar", Avatar);
       $.ajax({
         method: "POST",
-        url: URLS + "Library/manage_staff/" + 0,
+        url: "/Library/manage_staff/" + 0,
         headers: { "X-CSRFToken": csrftoken },
         processData: false,
         contentType: false,
@@ -56,12 +56,11 @@ $(document).ready(function () {
             }).then((ok) => {
               if (ok) {
                 window.location.reload();
-              }
-              else{
+              } else {
                 window.location.reload();
               }
             });
-            el
+            el;
             // toastr.success(response.Message);
           } else {
             toastr.error(response.Message);

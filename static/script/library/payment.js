@@ -26,7 +26,7 @@ $(document).ready(function () {
       } else {
         $.ajax({
           method: "POST",
-          url: URLS + "Library/manage_fine/" + ID,
+          url: "/Library/manage_fine/" + ID,
           headers: { "X-CSRFToken": csrftoken },
           processData: false,
           contentType: false,
@@ -65,7 +65,7 @@ $(document).ready(function () {
     formData.append("type", "getmember");
     $.ajax({
       method: "POST",
-      url: URLS + "Library/manage_member/" + 0,
+      url: "/Library/manage_member/" + 0,
       processData: false,
       contentType: false,
       data: formData,
@@ -123,7 +123,7 @@ $(document).ready(function () {
     formData.append("Member", $("#Member").val());
     $.ajax({
       method: "POST",
-      url: URLS + "Library/manage_fine/" + 0,
+      url: "/Library/manage_fine/" + 0,
       processData: false,
       contentType: false,
       data: formData,
@@ -165,7 +165,7 @@ $(document).ready(function () {
     formData.append("borrow", $("#borrow").val());
     $.ajax({
       method: "POST",
-      url: URLS + "Library/manage_fine/" + 0,
+      url: "/Library/manage_fine/" + 0,
       processData: false,
       contentType: false,
       data: formData,
@@ -174,7 +174,7 @@ $(document).ready(function () {
       success: function (response) {
         if (!response.isError) {
           rows = response.Message[0];
-          if (rows!= "") {
+          if (rows != "") {
             rows = response.Message[0];
             $("#tamount").val(rows.amount);
             $("#tpaid").val(rows.paid);

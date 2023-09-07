@@ -72,7 +72,7 @@ $(document).ready(function () {
       } else {
         $.ajax({
           method: "POST",
-          url: URLS + "Library/manage_book/" + 0,
+          url: "/Library/manage_book/" + 0,
           headers: { "X-CSRFToken": csrftoken },
           processData: false,
           contentType: false,
@@ -110,7 +110,7 @@ $(document).ready(function () {
         $.ajax({
           async: true,
           method: "DELETE",
-          url: URLS + "Library/manage_book/" + ID,
+          url: "/Library/manage_book/" + ID,
           headers: { "X-CSRFToken": csrftoken },
           async: false,
           success: function (response) {
@@ -137,7 +137,7 @@ $(document).ready(function () {
     $.ajax({
       async: false,
       method: "GET",
-      url: URLS + "Library/manage_book/" + ID,
+      url: "/Library/manage_book/" + ID,
       headers: { "X-CSRFToken": csrftoken },
       async: false,
       success: function (response) {
@@ -168,7 +168,7 @@ $(document).ready(function () {
   $("#datatable tbody").on("click", ".Show", function () {
     const ID = $(this).attr("ID");
     if (ID != "" && ID != undefined) {
-      window.location.replace(URLS + "Library/BookDetail/" + ID);
+      window.location.replace("/Library/BookDetail/" + ID);
     }
   });
   //Update Book
@@ -223,7 +223,7 @@ $(document).ready(function () {
       } else {
         $.ajax({
           method: "POST",
-          url: URLS + "Library/manage_book/" + ID,
+          url: "/Library/manage_book/" + ID,
           headers: { "X-CSRFToken": csrftoken },
           processData: false,
           contentType: false,
@@ -253,7 +253,7 @@ $(document).ready(function () {
     formData.append("type", "get");
     $.ajax({
       method: "POST",
-      url: URLS + "Library/manage_book/" + 0,
+      url: "/Library/manage_book/" + 0,
       headers: { "X-CSRFToken": csrftoken },
       processData: false,
       contentType: false,
@@ -312,7 +312,7 @@ $(document).ready(function () {
     formData.append("type", "get");
     $.ajax({
       method: "POST",
-      url: URLS + "Library/manage_author/" + 0,
+      url: "/Library/manage_author/" + 0,
       processData: false,
       contentType: false,
       data: formData,
@@ -348,7 +348,7 @@ $(document).ready(function () {
     formData.append("type", "get");
     $.ajax({
       method: "POST",
-      url: URLS + "Library/manage_category/" + 0,
+      url: "/Library/manage_category/" + 0,
       processData: false,
       contentType: false,
       data: formData,

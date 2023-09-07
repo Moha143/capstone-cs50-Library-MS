@@ -32,7 +32,7 @@ $(document).ready(function () {
       formData.append("Gender", Gender);
       $.ajax({
         method: "POST",
-        url: URLS + "Library/manage_member/" + ID,
+        url: "/Library/manage_member/" + ID,
         headers: { "X-CSRFToken": csrftoken },
         processData: false,
         contentType: false,
@@ -65,7 +65,7 @@ $(document).ready(function () {
         $.ajax({
           async: true,
           method: "DELETE",
-          url: URLS + "Library/manage_member/" + ID,
+          url: "/Library/manage_member/" + ID,
           headers: { "X-CSRFToken": csrftoken },
           async: false,
           success: function (response) {
@@ -92,7 +92,7 @@ $(document).ready(function () {
     $.ajax({
       async: false,
       method: "GET",
-      url: URLS + "Library/manage_member/" + ID,
+      url: "/Library/manage_member/" + ID,
       headers: { "X-CSRFToken": csrftoken },
       async: false,
       success: function (response) {
@@ -120,7 +120,7 @@ $(document).ready(function () {
     formData.append("type", "get");
     $.ajax({
       method: "POST",
-      url: URLS + "Library/manage_member/" + 0,
+      url: "/Library/manage_member/" + 0,
       headers: { "X-CSRFToken": csrftoken },
       processData: false,
       contentType: false,

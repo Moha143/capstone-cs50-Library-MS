@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.db.models.deletion import RestrictedError
 from datetime import datetime
-
+from . import functions
 Today = date.today()
 
 
@@ -39,6 +39,8 @@ def Logout(request):
 
 @login_required(login_url='Login')
 def Main(request):
+    functions.bookborrow()
+    functions.Fine()
     user = request.user.is_member
     if user:
         return render(request, 'Member Panel/member_dash.html')
@@ -101,6 +103,8 @@ def Category(request):
 
 @login_required(login_url='Login')
 def Book(request):
+    functions.bookborrow()
+    functions.Fine()
     if request.user.is_staff == True:
         return render(request, 'Library Panel/Library/Book.html')
     else:
@@ -109,6 +113,9 @@ def Book(request):
 
 @login_required(login_url='Login')
 def Borrow(request):
+    functions.bookborrow()
+    functions.Fine()
+    
     if request.user.is_staff == True:
         return render(request, 'Library Panel/Library/Borrow.html')
     else:
@@ -117,6 +124,8 @@ def Borrow(request):
 
 @login_required(login_url='Login')
 def FineReport(request):
+    functions.bookborrow()
+    functions.Fine()
     if request.user.is_staff == True:
         return render(request, 'Library Panel/Report/fine_report.html')
     else:

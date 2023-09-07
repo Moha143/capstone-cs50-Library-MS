@@ -32,7 +32,7 @@ $(document).ready(function () {
       formData.append("Gender", Gender);
       $.ajax({
         method: "POST",
-        url: URLS + "Library/manage_staff/" + ID,
+        url: "/Library/manage_staff/" + ID,
         headers: { "X-CSRFToken": csrftoken },
         processData: false,
         contentType: false,
@@ -43,7 +43,6 @@ $(document).ready(function () {
             toastr.success(response.Message);
             $("#member").modal("hide");
             AllMembers();
-
           } else {
             toastr.error(response.Message);
           }
@@ -66,7 +65,7 @@ $(document).ready(function () {
         $.ajax({
           async: true,
           method: "DELETE",
-          url: URLS + "Library/manage_staff/" + ID,
+          url: "/Library/manage_staff/" + ID,
           headers: { "X-CSRFToken": csrftoken },
           async: false,
           success: function (response) {
@@ -88,13 +87,12 @@ $(document).ready(function () {
     });
   });
   $("#datatable tbody").on("click", ".Edit", function () {
-
     const ID = $(this).attr("ID");
     $("#member").modal("show");
     $.ajax({
       async: false,
       method: "GET",
-      url: URLS + "Library/manage_staff/" + ID,
+      url: "/Library/manage_staff/" + ID,
       headers: { "X-CSRFToken": csrftoken },
       async: false,
       success: function (response) {
@@ -122,7 +120,7 @@ $(document).ready(function () {
     formData.append("type", "get");
     $.ajax({
       method: "POST",
-      url: URLS + "Library/manage_staff/" + 0,
+      url: "/Library/manage_staff/" + 0,
       headers: { "X-CSRFToken": csrftoken },
       processData: false,
       contentType: false,

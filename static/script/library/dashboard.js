@@ -9,7 +9,7 @@ $(document).ready(function () {
     formData.append("type", "get");
     $.ajax({
       method: "POST",
-      url: URLS + "Library/manage_author/" + 0,
+      url: "/Library/manage_author/" + 0,
       processData: false,
       contentType: false,
       data: formData,
@@ -51,7 +51,7 @@ $(document).ready(function () {
     formData.append("type", "get");
     $.ajax({
       method: "POST",
-      url: URLS + "Library/manage_category/" + 0,
+      url: "/Library/manage_category/" + 0,
       processData: false,
       contentType: false,
       data: formData,
@@ -98,7 +98,7 @@ $(document).ready(function () {
     } else {
       $.ajax({
         method: "POST",
-        url: URLS + "Library/manage_dashboard/" + 0,
+        url: "/Library/manage_dashboard/" + 0,
         processData: false,
         contentType: false,
         data: formData,
@@ -140,7 +140,7 @@ $(document).ready(function () {
     formData.append("type", "getusers");
     $.ajax({
       method: "POST",
-      url: URLS + "Library/manage_dashboard/" + 0,
+      url: "/Library/manage_dashboard/" + 0,
       processData: false,
       contentType: false,
       data: formData,

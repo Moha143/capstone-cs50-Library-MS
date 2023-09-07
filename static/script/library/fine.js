@@ -7,7 +7,7 @@ $(document).ready(function () {
     formData.append("type", "get");
     $.ajax({
       method: "POST",
-      url: URLS + "Library/manage_fine/" + 0,
+      url: "/Library/manage_fine/" + 0,
       headers: { "X-CSRFToken": csrftoken },
       processData: false,
       contentType: false,
@@ -63,13 +63,13 @@ $(document).ready(function () {
       $.ajax({
         async: false,
         method: "GET",
-        url: URLS + "Library/manage_fine/" + ID,
+        url: "/Library/manage_fine/" + ID,
         headers: { "X-CSRFToken": csrftoken },
         async: false,
         success: function (response) {
           if (!response.isError) {
             sessionStorage.setItem("Fine", JSON.stringify(response.Message));
-            window.location.replace(URLS + "Library/print_fine");
+            window.location.replace("/Library/print_fine");
           } else {
             swal(response.Message, {
               icon: "error",
@@ -93,7 +93,7 @@ $(document).ready(function () {
         $.ajax({
           async: true,
           method: "DELETE",
-          url: URLS + "Library/manage_fine/" + ID,
+          url: "/Library/manage_fine/" + ID,
           headers: { "X-CSRFToken": csrftoken },
           async: false,
           success: function (response) {

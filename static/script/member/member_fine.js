@@ -11,7 +11,7 @@ $(document).ready(function () {
     formData.append("Member", id);
     $.ajax({
       method: "POST",
-      url: URLS + "Library/manage_member_dashbord/" + 0,
+      url: "/Library/manage_member_dashbord/" + 0,
       headers: { "X-CSRFToken": csrftoken },
       processData: false,
       contentType: false,

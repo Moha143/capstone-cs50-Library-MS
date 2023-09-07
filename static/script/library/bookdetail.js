@@ -9,7 +9,7 @@ function bookdetail(id) {
   $.ajax({
     async: false,
     method: "GET",
-    url: URLS + "Library/manage_book/" + id,
+    url: "/Library/manage_book/" + id,
     headers: { "X-CSRFToken": csrftoken },
     async: false,
     success: function (response) {

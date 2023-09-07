@@ -17,7 +17,7 @@ $(document).ready(function () {
       formData.append("type", "add");
       $.ajax({
         method: "POST",
-        url: URLS + "Library/manage_author/" + 0,
+        url: "/Library/manage_author/" + 0,
         headers: { "X-CSRFToken": csrftoken },
         processData: false,
         contentType: false,
@@ -25,7 +25,6 @@ $(document).ready(function () {
         async: true,
         success: function (response) {
           if (!response.isError) {
-       
             swal(response.Message, {
               icon: "success",
             });
@@ -53,7 +52,7 @@ $(document).ready(function () {
       formData.append("FName", FName);
       $.ajax({
         method: "POST",
-        url: URLS + "Library/manage_author/" + ID,
+        url: "/Library/manage_author/" + ID,
         headers: { "X-CSRFToken": csrftoken },
         processData: false,
         contentType: false,
@@ -90,7 +89,7 @@ $(document).ready(function () {
         $.ajax({
           async: true,
           method: "DELETE",
-          url: URLS + "Library/manage_author/" + ID,
+          url: "/Library/manage_author/" + ID,
           headers: { "X-CSRFToken": csrftoken },
           async: false,
           success: function (response) {
@@ -117,7 +116,7 @@ $(document).ready(function () {
     $.ajax({
       async: false,
       method: "GET",
-      url: URLS + "Library/manage_author/" + ID,
+      url: "/Library/manage_author/" + ID,
       headers: { "X-CSRFToken": csrftoken },
       async: false,
       success: function (response) {
@@ -140,7 +139,7 @@ $(document).ready(function () {
     formData.append("type", "get");
     $.ajax({
       method: "POST",
-      url: URLS + "Library/manage_author/" + 0,
+      url: "/Library/manage_author/" + 0,
       headers: { "X-CSRFToken": csrftoken },
       processData: false,
       contentType: false,

@@ -1,4 +1,4 @@
-APScheduler==3.9.1
+
 asgiref==3.5.2
 autopep8==1.7.0
 Django==4.1

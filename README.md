@@ -13,7 +13,6 @@ I believe my project satisfies the distinctiveness and complexity requirements p
 
 The web platform is structured as follows
 
-- **apschedule:** Advanced Python Scheduler (APScheduler) is a Python library that lets you schedule your Python code to be executed later, either just once or periodically.
 - **LMS:** The Library folder contains the main Django app.
 - **Library:** This folder app handles the models and funtions relating to staffs and members.
 - **media:** This folder are stored all images of the system.
@@ -97,7 +96,6 @@ There are 7 models for the web application's database.
 
 ## Back End Files:
 
-
 - `Library` - Holds apps files.
 
   - `Library\__init__.py` makes LMS appear as a package to Python _[empty]_
@@ -137,7 +135,7 @@ There are 7 models for the web application's database.
 
 ```
 as usper user login :
-email:mo@gmail.com
+email:osama@gmail.com
 pass: 123
 
 as member
